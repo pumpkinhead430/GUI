@@ -55,6 +55,11 @@ public class MenuController implements Initializable
         System.out.println("You clicked on About!");
     }
 
+    private void provideAboutFunctionalit()
+    {
+        System.out.println("You clicked on About!");
+    }
+
 
     @Override
     public void initialize(java.net.URL arg0, ResourceBundle arg1) {

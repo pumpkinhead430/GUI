@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import java.lang.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Text?>
+<BorderPane id="Border" prefHeight="400" prefWidth="800"
+            xmlns:fx = "http://javafx.com/fxml" fx:controller= "MenuController">
+    <top >
+    <MenuBar fx:id="menuBar" onKeyPressed="#handleKeyInput">
+            <Menu text="File">
+                <MenuItem text="New Project..." onAction="#handleAboutAction"/>
+                <MenuItem text="Open Project..."/>
+                <SeparatorMenuItem  />
+                <MenuItem text="Export..."/>
+                <MenuItem text="Save As..."/>
+                <MenuItem text="Save"/>
+                <SeparatorMenuItem  />
+                <MenuItem text="Exit"/>
+            </Menu>
+            <Menu text="Edit">
+                <MenuItem text="Copy"/>
+                <MenuItem text="Cut"/>
+                <MenuItem text="Paste"/>
+            </Menu>
+            <Menu text="Help">
+                <MenuItem text="Search" disable="true"/>
+                <MenuItem text="Online Manual" visible="false"/>
+                <SeparatorMenuItem />
+                <MenuItem text="About" onAction="#handleAboutAction"/>
+            </Menu>
+    </MenuBar>
+    </top>
+    <left>
+
+        <HBox spacing="20">
+            <Label text="password:"/>
+            <TextField fx:id="firstNameField" promptText="First Name"
+                       prefWidth="90"/>
+        </HBox>
+
+
+
+
+
+    </left>
+
+    <center>
+
+        <HBox spacing="20">
+
+            <Button text="ClickMe" onAction="#YouClicked"/>
+            <Button text="ClickMe" onAction="#YouClicked"/>
+
+        </HBox>
+
+
+
+    </center>
+</BorderPane>

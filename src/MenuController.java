@@ -14,8 +14,6 @@ public class MenuController implements Initializable
 {
     @FXML
     private MenuBar menuBar;
-    @FXML
-    private TextField firstNameField;
 
     /**
      * Handle action related to "About" menu item.
@@ -59,13 +57,8 @@ public class MenuController implements Initializable
 
     @Override
     public void initialize(java.net.URL arg0, ResourceBundle arg1) {
-
-        firstNameField.textProperty().addListener((obs, oldText, newText) -> YouClicked());
         menuBar.setFocusTraversable(true);
 
     }
-    @FXML
-    private void YouClicked(){
-        System.out.println(firstNameField.getText());
-    }
+
 }

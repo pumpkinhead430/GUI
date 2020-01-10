@@ -1,0 +1,88 @@
+{
+  "Movables": [
+    {
+      "health": 0,
+      "x": 15,
+      "y": 0,
+      "animations": [
+        {
+          "defult": "defult"
+        },
+        {
+          "trigger": 22,
+          "forcey": -20,
+          "forcex": 0,
+          "name": "jump",
+          "ani_starter": [ "jump", "MoveRight" ],
+          "frames": [ "assets/UserR.bmp", "assets/UserWalR.bmp" ],
+          "damage": 3
+        },
+        {
+          "trigger": 7,
+          "forcey": 0,
+          "forcex": 10,
+          "name": "walk",
+          "ani_starter": [ "MoveRight", "" ],
+          "frames": [ "assets/UserR.bmp", "assets/UserWalR.bmp" ],
+          "damage": 0
+        }
+      ]
+    },
+
+    {
+      "health": 100,
+      "x": 0,
+      "y": 60,
+      "animations": [
+        {
+          "defult": "defult"
+        },
+        {
+          "trigger": 26,
+          "forcey": 0,
+          "forcex": 10,
+          "name": "walk",
+          "ani_starter": [ "MoveRight", "help" ],
+          "frames": [ "assets/UserR.bmp", "assets/UserWalR.bmp" ],
+          "damage": 3
+        },
+        {
+          "trigger": 44,
+          "forcey": -10,
+          "forcex": 0,
+          "name": "jump",
+          "ani_starter": [ "jump", "help" ],
+          "frames": [ "assets/UserR.bmp", "assets/UserWalR.bmp" ],
+          "damage": 3
+        }
+      ]
+    },
+
+    {
+      "health": 100000,
+      "x": 30,
+      "y": 60,
+      "animations": [
+        {
+          "trigger": -2,
+          "forcey": 0,
+          "forcex": 10,
+          "name": "MoveRight",
+          "ani_starter": [ "", "" ],
+          "frames": [ "assets/defult.png" ],
+          "damage": 0
+        }
+      ]
+    }
+  ],
+  "stationeries": [
+    {
+      "damage": 0,
+      "path": "assets/defult.png",
+      "x": 0,
+      "y": 500,
+      "ani_start": [ "", "" ]
+    }
+
+  ]
+}

@@ -1,3 +1,5 @@
+import java.io.FileReader;
+import java.io.Reader;
 import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
@@ -5,33 +7,41 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.input.InputEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+import java.io.FileWriter;
+import java.io.IOException;
 
 
 public class MenuController implements Initializable
 {
     @FXML
     private MenuBar menuBar;
+    @FXML
+    private  TextField gravityField;
+    @FXML
+    private  TextField titleField;
+    @FXML
+    private  TextField windowWidthField;
+    @FXML
+    private  TextField windowHeightField;
+    @FXML
+    private  TextField backGroundField;
 
-    /**
-     * Handle action related to "About" menu item.
-     *
-     * @param event Event on "About" menu item.
-     */
+    private JsonHandler worldSettings;
     @FXML
     private void handleAboutAction(final ActionEvent event)
     {
         provideAboutFunctionality();
     }
 
-    /**
-     * Handle action related to input (in this case specifically only responds to
-     * keyboard event CTRL-A).
-     *
-     * @param event Input event.
-     */
+
     @FXML
     private void handleKeyInput(final InputEvent event)
     {
@@ -45,9 +55,7 @@ public class MenuController implements Initializable
         }
     }
 
-    /**
-     * Perform functionality associated with "About" menu selection or CTRL-A.
-     */
+
     private void provideAboutFunctionality()
     {
         System.out.println("You clicked on About!");
@@ -55,10 +63,40 @@ public class MenuController implements Initializable
 
 
 
+
+
     @Override
-    public void initialize(java.net.URL arg0, ResourceBundle arg1) {
+    public void initialize(java.net.URL arg0, ResourceBundle arg1)
+    {
+        worldSettings = new JsonHandler("D:\\pumpkinhead\\final project\\git_GUI\\src\\assets\\GameData.json");
+
         menuBar.setFocusTraversable(true);
+        // world settings fields
+        titleField.textProperty().addListener((observable, oldValue, newValue) -> HandleWorldSettingsField(titleField, oldValue, newValue));
+        Main.NumberFilter(gravityField);
+        gravityField.textProperty().addListener((observable, oldValue, newValue) -> HandleWorldSettingsField(gravityField, oldValue, newValue));
+        Main.NumberFilter(windowWidthField);
+        windowWidthField.textProperty().addListener((observable, oldValue, newValue) ->HandleWorldSettingsField(windowWidthField, oldValue, newValue));
+        Main.NumberFilter(windowHeightField);
+        windowHeightField.textProperty().addListener((observable, oldValue, newValue) ->HandleWorldSettingsField(windowHeightField, oldValue, newValue));
+        backGroundField.textProperty().addListener((observable, oldValue, newValue) ->HandleWorldSettingsField(backGroundField, oldValue, newValue));
 
     }
+
+    public void HandleWorldSettingsField(TextField field, String oldValue, String newValue) {
+        if(field == gravityField)
+            worldSettings.GetObject().put("gravity", Integer.parseInt(newValue));
+
+        if(field == windowWidthField)
+            worldSettings.GetObject().put("width", Integer.parseInt(newValue));
+
+        if(field == windowHeightField)
+            worldSettings.GetObject().put("height", Integer.parseInt(newValue));
+
+        if(field == titleField)
+            worldSettings.GetObject().put("title", newValue);
+        worldSettings.Write();
+    }
+
 
 }

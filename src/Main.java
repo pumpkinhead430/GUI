@@ -36,7 +36,7 @@ public class Main extends Application
 
         Parent fxmlRoot = FXMLLoader.load(getClass().getResource("JavaFx2Menus.fxml"));
         Scene scene = new Scene(fxmlRoot);
-        new JMetro(JMetro.Style.DARK).applyTheme(scene);
+        //new JMetro(JMetro.Style.DARK).applyTheme(scene);
         stage.setScene(scene);
 
         stage.show();

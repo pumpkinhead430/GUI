@@ -5,7 +5,7 @@
 <?import javafx.scene.effect.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-
+<?import javafx.stage.FileChooser?>
 <BorderPane id="Border" prefHeight="400" prefWidth="800" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MenuController">
     <top>
     <MenuBar fx:id="menuBar" onKeyPressed="#handleKeyInput">
@@ -35,7 +35,7 @@
    <left>
       <ScrollPane>
          <content>
-            <VBox spacing="10.0">
+            <VBox alignment="TOP_CENTER" spacing="10.0">
                <children>
                   <Label alignment="CENTER" text="World Settings" textAlignment="CENTER" underline="true">
                      <font>
@@ -44,9 +44,6 @@
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets>
-                     <padding>
-                        <Insets left="45.0" />
-                     </padding>
                      <effect>
                         <Blend />
                      </effect>
@@ -73,7 +70,7 @@
                         <TextField fx:id="windowHeightField" promptText="height..." GridPane.columnIndex="1" GridPane.rowIndex="2" />
                         <Label text="BackGround:" GridPane.rowIndex="3" />
                         <TextField fx:id="backGroundField" promptText="picture..." GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                        <CheckBox fx:id="FullScreenBox" mnemonicParsing="false" text="FullScreen" GridPane.rowIndex="4" />
+                        <CheckBox fx:id="fullScreenBox" mnemonicParsing="false" text="FullScreen" GridPane.rowIndex="4" />
                         <Label text="Title:" GridPane.rowIndex="5" />
                         <TextField fx:id="titleField" promptText="title..." GridPane.columnIndex="1" GridPane.rowIndex="5" />
                      </children>

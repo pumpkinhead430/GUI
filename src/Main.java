@@ -13,6 +13,7 @@ import javafx.scene.control.TextFormatter;
 import javafx.scene.input.InputEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import jfxtras.styles.jmetro8.JMetro;
 import netscape.javascript.JSObject;
@@ -34,9 +35,10 @@ public class Main extends Application
     public void start(final Stage stage) throws Exception
     {
 
-        Parent fxmlRoot = FXMLLoader.load(getClass().getResource("JavaFx2Menus.fxml"));
+        Parent fxmlRoot = FXMLLoader.load(getClass().getResource("Browser.fxml"));
         Scene scene = new Scene(fxmlRoot);
         //new JMetro(JMetro.Style.DARK).applyTheme(scene);
+        scene.getStylesheets().add("Viper.css");
         stage.setScene(scene);
 
         stage.show();

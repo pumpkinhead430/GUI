@@ -5,9 +5,8 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TextFormatter;
+import javafx.scene.control.*;
+import javafx.scene.control.skin.ChoiceBoxSkin;
 import javafx.scene.input.InputEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -33,6 +32,9 @@ public class MenuController implements Initializable
     private  TextField windowHeightField;
     @FXML
     private  TextField backGroundField;
+
+    @FXML
+    private CheckBox fullScreenBox;
 
     private JsonHandler worldSettings;
     @FXML
@@ -68,7 +70,13 @@ public class MenuController implements Initializable
     @Override
     public void initialize(java.net.URL arg0, ResourceBundle arg1)
     {
-        worldSettings = new JsonHandler("D:\\pumpkinhead\\final project\\git_GUI\\src\\assets\\GameData.json");
+        worldSettings = new JsonHandler("src\\assets\\GameData.json");
+
+        fullScreenBox.setOnAction(e ->{
+            System.out.println("wad");
+            worldSettings.GetObject().put("fullscreen", fullScreenBox.isSelected());
+            worldSettings.Write();
+        });
 
         menuBar.setFocusTraversable(true);
         // world settings fields

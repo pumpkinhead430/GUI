@@ -5,7 +5,7 @@
 <?import javafx.scene.effect.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<?import javafx.stage.FileChooser?>
+
 <BorderPane id="Border" prefHeight="400" prefWidth="800" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MenuController">
     <top>
     <MenuBar fx:id="menuBar" onKeyPressed="#handleKeyInput">
@@ -60,19 +60,20 @@
                         <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
                         <Label text="Gravity:" />
                         <TextField fx:id="gravityField" promptText="gravity..." GridPane.columnIndex="1" />
-                        <Label text="Window Width:" GridPane.rowIndex="1" />
-                        <TextField fx:id="windowWidthField" promptText="width..." GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <Label text="Window Height:" GridPane.rowIndex="2" />
-                        <TextField fx:id="windowHeightField" promptText="height..." GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <Label text="BackGround:" GridPane.rowIndex="3" />
-                        <TextField fx:id="backGroundField" promptText="picture..." GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                        <CheckBox fx:id="fullScreenBox" mnemonicParsing="false" text="FullScreen" GridPane.rowIndex="4" />
-                        <Label text="Title:" GridPane.rowIndex="5" />
-                        <TextField fx:id="titleField" promptText="title..." GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                        <Label text="Window Width:" GridPane.rowIndex="2" />
+                        <TextField fx:id="windowWidthField" promptText="width..." GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Label text="Window Height:" GridPane.rowIndex="3" />
+                        <TextField fx:id="windowHeightField" promptText="height..." GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <Label text="BackGround:" GridPane.rowIndex="4" />
+                        <CheckBox fx:id="fullScreenBox" mnemonicParsing="false" text="FullScreen" GridPane.rowIndex="5" />
+                        <Label text="Title:" GridPane.rowIndex="6" />
+                        <TextField fx:id="titleField" promptText="title..." GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                        <Button fx:id="backGroundButton" mnemonicParsing="false" onAction="#handleBackGroundButton" prefHeight="25.0" prefWidth="99.0" text="Picture..." GridPane.columnIndex="1" GridPane.rowIndex="4" />
                      </children>
                      <padding>
                         <Insets left="10.0" />

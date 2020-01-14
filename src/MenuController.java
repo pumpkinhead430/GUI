@@ -31,7 +31,7 @@ public class MenuController implements Initializable
     @FXML
     private  TextField windowHeightField;
     @FXML
-    private  TextField backGroundField;
+    private  Button backGroundButton;
 
     @FXML
     private CheckBox fullScreenBox;
@@ -41,6 +41,13 @@ public class MenuController implements Initializable
     private void handleAboutAction(final ActionEvent event)
     {
         provideAboutFunctionality();
+    }
+
+    @FXML
+    private void handleBackGroundButton() throws IOException {
+        String Picture = FullBrowser.display("Background");
+        if(!Picture.equals(""))
+            backGroundButton.setText(Picture);
     }
 
 
@@ -87,7 +94,6 @@ public class MenuController implements Initializable
         windowWidthField.textProperty().addListener((observable, oldValue, newValue) ->HandleWorldSettingsField(windowWidthField, oldValue, newValue));
         Main.NumberFilter(windowHeightField);
         windowHeightField.textProperty().addListener((observable, oldValue, newValue) ->HandleWorldSettingsField(windowHeightField, oldValue, newValue));
-        backGroundField.textProperty().addListener((observable, oldValue, newValue) ->HandleWorldSettingsField(backGroundField, oldValue, newValue));
 
     }
 

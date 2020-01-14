@@ -35,7 +35,7 @@ public class Main extends Application
     public void start(final Stage stage) throws Exception
     {
 
-        Parent fxmlRoot = FXMLLoader.load(getClass().getResource("Browser.fxml"));
+        Parent fxmlRoot = FXMLLoader.load(getClass().getResource("JavaFx2Menus.fxml"));
         Scene scene = new Scene(fxmlRoot);
         //new JMetro(JMetro.Style.DARK).applyTheme(scene);
         scene.getStylesheets().add("Viper.css");

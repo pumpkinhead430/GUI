@@ -1,4 +1,6 @@
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -7,24 +9,32 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 
 import java.io.File;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 
 public class BrowserController implements Initializable {
     @FXML
     private TreeView<String> browseTree;
+    private static final String[] pictureFormat = {"jpg", "png"};
+    private String fileName;
     @Override
     public void initialize(java.net.URL arg0, ResourceBundle arg1)
     {
-        browseTree.getSelectionModel().selectedItemProperty().addListener((v, oldValue, newValue) -> handleExpanded(newValue));
+        fileName = "";
+        browseTree.setOnMouseClicked(this::handleClicked);
         TreeItem<String> root = new TreeItem<>();
         root.setExpanded(true);
         browseTree.setRoot(root);
         for(File path:File.listRoots())
         {
            TreeItem<String> parentItem = new TreeItem<>(path.getPath());
+           parentItem.expandedProperty().addListener((observableValue, aBoolean, t1) -> AddExpansionProperty(observableValue, t1));
            browseTree.getRoot().getChildren().add(parentItem);
             File dir = new File(path.getPath());
             if(dir.isDirectory()) {
@@ -33,23 +43,57 @@ public class BrowserController implements Initializable {
         }
     }
 
+    public void handleClicked(MouseEvent mouseEvent){
+        if(mouseEvent.getClickCount() == 2){
+            TreeItem<String> treeItem = browseTree.getSelectionModel().getSelectedItem();
+            File treeFile = GetFileFromNode(treeItem);
+            if(treeFile.isFile() && IsPicture(treeFile.getName()))
+            {
+                Stage thisWindow = (Stage)browseTree.getScene().getWindow();
+                thisWindow.close();
+                fileName = treeFile.getName();
+            }
+        }
+
+    }
+
     public void handleExpanded(TreeItem<String> newValue)
     {
         System.out.println(newValue.getValue());
         File treeFile = GetFileFromNode(newValue);
        LoadLevels(2, newValue);
-        if(treeFile.isFile())
+        if(treeFile.isFile() && IsPicture(treeFile.getName()))
         {
-            System.out.println(treeFile.getName());
+            Stage thisWindow = (Stage)browseTree.getScene().getWindow();
+            thisWindow.close();
+            fileName = treeFile.getName();
         }
     }
+    private void AddExpansionProperty(ObservableValue<? extends Boolean> observableValue, Boolean t1)
+    {
+        BooleanProperty bb = (BooleanProperty) observableValue;
+        TreeItem t = (TreeItem) bb.getBean();
+        handleExpanded(t);
+    }
+    private Boolean IsPicture(String fileName){
+        String extension = "";
 
+        int i = fileName.lastIndexOf('.');
+        if (i > 0) {
+            extension = fileName.substring(i+1);
+        }
+        for(String format : pictureFormat)
+            if(extension.equals(format))
+                return true;
+        return false;
+    }
 
     public void LoadBranch(TreeItem<String> parent, File dir) {
         File[] directoryListing = dir.listFiles();
         if (directoryListing != null) {
             for (File child : directoryListing) {
                 TreeItem<String> childItem = new TreeItem<>(child.getName());
+                childItem.expandedProperty().addListener((observableValue, aBoolean, t1) -> AddExpansionProperty(observableValue, t1));
                 parent.getChildren().add(childItem);
             }
         }
@@ -78,5 +122,8 @@ public class BrowserController implements Initializable {
             tempValue = tempValue.getParent();
         }
         return new File(path);
+    }
+    public String GetFileName(){
+        return fileName;
     }
 }

@@ -1,29 +1,22 @@
-import java.io.*;
-import java.util.ResourceBundle;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.MenuBar;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
-import javafx.scene.input.InputEvent;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import jfxtras.styles.jmetro8.JMetro;
-import netscape.javascript.JSObject;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import org.apache.commons.io.FileUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Paths;
 
 
 public class Main extends Application
 {
+    public static final String[] pictureFormat = {"jpg", "png", "bmp", "jpeg"};
+    public static final String directory = Paths.get("src").toAbsolutePath().toString();
 
     public static void main(String[] arguments)
     {
@@ -34,14 +27,13 @@ public class Main extends Application
     @Override
     public void start(final Stage stage) throws Exception
     {
-
-        Parent fxmlRoot = FXMLLoader.load(getClass().getResource("JavaFx2Menus.fxml"));
+        System.out.println(directory);
+        Parent fxmlRoot = FXMLLoader.load(getClass().getResource("MainLayout.fxml"));
         Scene scene = new Scene(fxmlRoot);
-        //new JMetro(JMetro.Style.DARK).applyTheme(scene);
         scene.getStylesheets().add("Viper.css");
         stage.setScene(scene);
-
         stage.show();
+
     }
 
     public static void NumberFilter(TextField field) {
@@ -61,6 +53,32 @@ public class Main extends Application
             }
             return c;
         }));
+    }
+
+    public static Boolean IsPicture(String fileName){
+        String extension = "";
+
+        int i = fileName.lastIndexOf('.');
+        if (i > 0) {
+            extension = fileName.substring(i+1);
+        }
+        for(String format : pictureFormat)
+            if(extension.equals(format))
+                return true;
+        return false;
+    }
+    public static void CopyFile(File src, File dest){
+        if (src.exists() && dest.exists()) {
+            try {
+                FileUtils.copyFileToDirectory(src, dest);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    public static Boolean ExistsInDir(File file, File dir){
+        File checkFile = new File(dir.getPath() + "\\" + file.getName());
+        return checkFile.exists();
     }
 
 

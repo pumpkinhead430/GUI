@@ -21,12 +21,11 @@ import java.util.ResourceBundle;
 public class BrowserController implements Initializable {
     @FXML
     private TreeView<String> browseTree;
-    private static final String[] pictureFormat = {"jpg", "png"};
-    private String fileName;
+    private File file;
     @Override
     public void initialize(java.net.URL arg0, ResourceBundle arg1)
     {
-        fileName = "";
+        file = null;
         browseTree.setOnMouseClicked(this::handleClicked);
         TreeItem<String> root = new TreeItem<>();
         root.setExpanded(true);
@@ -46,12 +45,13 @@ public class BrowserController implements Initializable {
     public void handleClicked(MouseEvent mouseEvent){
         if(mouseEvent.getClickCount() == 2){
             TreeItem<String> treeItem = browseTree.getSelectionModel().getSelectedItem();
-            File treeFile = GetFileFromNode(treeItem);
-            if(treeFile.isFile() && IsPicture(treeFile.getName()))
-            {
-                Stage thisWindow = (Stage)browseTree.getScene().getWindow();
-                thisWindow.close();
-                fileName = treeFile.getName();
+            if(treeItem != null) {
+                File treeFile = GetFileFromNode(treeItem);
+                if (treeFile.isFile() && Main.IsPicture(treeFile.getName())) {
+                    Stage thisWindow = (Stage) browseTree.getScene().getWindow();
+                    thisWindow.close();
+                    file = treeFile;
+                }
             }
         }
 
@@ -59,14 +59,14 @@ public class BrowserController implements Initializable {
 
     public void handleExpanded(TreeItem<String> newValue)
     {
-        System.out.println(newValue.getValue());
         File treeFile = GetFileFromNode(newValue);
        LoadLevels(2, newValue);
-        if(treeFile.isFile() && IsPicture(treeFile.getName()))
+        if(treeFile.isFile() && Main.IsPicture(treeFile.getName()))
         {
+            System.out.println("nan?");
             Stage thisWindow = (Stage)browseTree.getScene().getWindow();
             thisWindow.close();
-            fileName = treeFile.getName();
+            file =  treeFile;
         }
     }
     private void AddExpansionProperty(ObservableValue<? extends Boolean> observableValue, Boolean t1)
@@ -74,18 +74,6 @@ public class BrowserController implements Initializable {
         BooleanProperty bb = (BooleanProperty) observableValue;
         TreeItem t = (TreeItem) bb.getBean();
         handleExpanded(t);
-    }
-    private Boolean IsPicture(String fileName){
-        String extension = "";
-
-        int i = fileName.lastIndexOf('.');
-        if (i > 0) {
-            extension = fileName.substring(i+1);
-        }
-        for(String format : pictureFormat)
-            if(extension.equals(format))
-                return true;
-        return false;
     }
 
     public void LoadBranch(TreeItem<String> parent, File dir) {
@@ -123,7 +111,7 @@ public class BrowserController implements Initializable {
         }
         return new File(path);
     }
-    public String GetFileName(){
-        return fileName;
+    public File GetFile(){
+        return file;
     }
 }

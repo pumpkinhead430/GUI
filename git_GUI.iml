@@ -19,20 +19,18 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../jmetro-5.2.jar!/" />
+          <root url="file://$MODULE_DIR$/commons-io-2.6" />
         </CLASSES>
-        <JAVADOC />
-        <SOURCES />
+        <JAVADOC>
+          <root url="file://$MODULE_DIR$/commons-io-2.6/docs" />
+        </JAVADOC>
+        <SOURCES>
+          <root url="file://$MODULE_DIR$/commons-io-2.6" />
+        </SOURCES>
+        <jarDirectory url="file://$MODULE_DIR$/commons-io-2.6" recursive="false" />
+        <jarDirectory url="file://$MODULE_DIR$/commons-io-2.6" recursive="false" type="SOURCES" />
       </library>
     </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/../controlsfx-8.40.14.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
+    <orderEntry type="library" name="org.jfxtras:jmetro:5.3" level="project" />
   </component>
 </module>

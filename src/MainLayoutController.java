@@ -3,13 +3,14 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.skin.ChoiceBoxSkin;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.HBox;
 import org.json.simple.JSONObject;
@@ -48,14 +49,25 @@ public class MainLayoutController implements Initializable
 
     @FXML
     private void handleBackGroundButton() throws IOException {
-        String Picture = FullBrowser.display("Background");
-        if(!Picture.equals(""))
-            backGroundButton.setText(Picture);
+        File Picture = FullBrowser.display("Background");
+        if(Picture != null){
+            backGroundButton.setText(Picture.getName());
+            worldSettings.GetObject().put("background", "assets\\" + Picture.getName());
+            worldSettings.Write();
+        }
+
     }
     @FXML
     private void HandleImport() throws IOException {
-        String fileName = FullBrowser.display("Import Picture");
-        importFiles.getChildren().add(new Label(fileName));
+
+        File file = FullBrowser.display("Import Picture");
+        if(file != null){
+            ImageView temp = new ImageView();
+            temp.setImage(new Image(file.toURI().toString()));
+            temp.setFitWidth(150);
+            temp.setFitHeight(100);
+            importFiles.getChildren().add(temp);
+        }
     }
 
 
@@ -91,35 +103,34 @@ public class MainLayoutController implements Initializable
             worldSettings.GetObject().put("fullscreen", fullScreenBox.isSelected());
             worldSettings.Write();
         });
+        //importButton.setOnMouseEntered(e -> );
         importFiles.setOnDragOver(this::AcceptFiles);
         importFiles.setOnDragDropped(this::HandleDrop);
 
         menuBar.setFocusTraversable(true);
         // world settings fields
-        titleField.textProperty().addListener((observable, oldValue, newValue) -> HandleWorldSettingsField(titleField, oldValue, newValue));
-        Main.NumberFilter(gravityField);
-        gravityField.textProperty().addListener((observable, oldValue, newValue) -> HandleWorldSettingsField(gravityField, oldValue, newValue));
-        Main.NumberFilter(windowWidthField);
-        windowWidthField.textProperty().addListener((observable, oldValue, newValue) ->HandleWorldSettingsField(windowWidthField, oldValue, newValue));
-        Main.NumberFilter(windowHeightField);
-        windowHeightField.textProperty().addListener((observable, oldValue, newValue) ->HandleWorldSettingsField(windowHeightField, oldValue, newValue));
-
-    }
-
-    public void HandleWorldSettingsField(TextField field, String oldValue, String newValue) {
-        if(field == gravityField)
-            worldSettings.GetObject().put("gravity", Integer.parseInt(newValue));
-
-        if(field == windowWidthField)
-            worldSettings.GetObject().put("width", Integer.parseInt(newValue));
-
-        if(field == windowHeightField)
-            worldSettings.GetObject().put("height", Integer.parseInt(newValue));
-
-        if(field == titleField)
+        titleField.textProperty().addListener((observable, oldValue, newValue) -> {
             worldSettings.GetObject().put("title", newValue);
-        worldSettings.Write();
+            worldSettings.Write();
+        });
+        Main.NumberFilter(gravityField);
+        gravityField.textProperty().addListener((observable, oldValue, newValue) -> {
+            worldSettings.GetObject().put("gravity", Integer.parseInt(newValue));
+            worldSettings.Write();
+        });
+        Main.NumberFilter(windowWidthField);
+        windowWidthField.textProperty().addListener((observable, oldValue, newValue) ->{
+            worldSettings.GetObject().put("width", Integer.parseInt(newValue));
+            worldSettings.Write();
+        });
+        Main.NumberFilter(windowHeightField);
+        windowHeightField.textProperty().addListener((observable, oldValue, newValue) ->{
+            worldSettings.GetObject().put("height", Integer.parseInt(newValue));
+            worldSettings.Write();
+        });
+
     }
+
 
     public void AcceptFiles(DragEvent event){
         if (event.getDragboard().hasFiles()) {
@@ -139,10 +150,15 @@ public class MainLayoutController implements Initializable
 
     public void HandleDrop(DragEvent event){
        List<File> dropFiles = event.getDragboard().getFiles();
+        File asset_directory = new File(Main.directory + "\\assets");
         for(File file : dropFiles){
-            if(!Main.ExistsInDir(file, new File(Main.directory + "\\assets"))){
-                Main.CopyFile(file, new File(Main.directory + "\\assets"));
-                importFiles.getChildren().add(new Label(file.getName()));
+            if(!Main.ExistsInDir(file, asset_directory)){
+                Main.CopyFile(file, asset_directory);
+                ImageView temp = new ImageView();
+                temp.setImage(new Image(file.toURI().toString()));
+                temp.setFitWidth(150);
+                temp.setFitHeight(100);
+                importFiles.getChildren().add(temp);
             }
         }
     }

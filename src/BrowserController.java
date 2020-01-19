@@ -63,7 +63,6 @@ public class BrowserController implements Initializable {
        LoadLevels(2, newValue);
         if(treeFile.isFile() && Main.IsPicture(treeFile.getName()))
         {
-            System.out.println("nan?");
             Stage thisWindow = (Stage)browseTree.getScene().getWindow();
             thisWindow.close();
             file =  treeFile;

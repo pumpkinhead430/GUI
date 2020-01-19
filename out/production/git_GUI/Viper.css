@@ -50,6 +50,9 @@
    -fx-background-insets: 0,1,1;
    -fx-effect: dropShadow( three-pass-box , rgba(50,50,50,0.5) , 3, 0.0 , 0 , 1);
 }
+.button:hover{
+    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
+}
 
 .menu-bar {
     -fx-background-color: rgb(50, 50, 50);

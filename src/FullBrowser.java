@@ -12,7 +12,7 @@ import java.io.ObjectInputStream;
 
 public class FullBrowser {
 
-    public static String display(String title) throws IOException {
+    public static File display(String title) throws IOException {
         Stage window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
         window.setTitle(title);
@@ -27,13 +27,14 @@ public class FullBrowser {
         window.showAndWait();
         File selectedFile = browserController.GetFile();
         if(selectedFile != null) {
-            File dest = new File(Main.directory + "\\assets" + selectedFile.getName());
+            File assetsDir = new File(Main.directory + "\\assets");
+            File dest = new File(assetsDir.getName() + selectedFile.getName());
             if (!dest.exists()) {
-                Main.CopyFile(selectedFile ,new File(Main.directory + "\\assets"));
+                Main.CopyFile(selectedFile , assetsDir);
             }
-            return selectedFile.getName();
+            return selectedFile;
         }
-        return "";
+        return null;
 
     }
 }

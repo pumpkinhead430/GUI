@@ -79,7 +79,6 @@ public class MainLayoutController implements Initializable
                 e.consume();
 
             });
-            //temp.startDragAndDrop(TransferMode.COPY);
             importFiles.getChildren().add(temp);
         }
     }

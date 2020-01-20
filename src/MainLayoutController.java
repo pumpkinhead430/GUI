@@ -1,29 +1,33 @@
 import java.io.*;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+
+import javax.swing.*;
 
 
 public class MainLayoutController implements Initializable
 {
     @FXML
     private MenuBar menuBar;
+    private int number;
     @FXML
     private  TextField gravityField;
     @FXML
@@ -53,6 +57,8 @@ public class MainLayoutController implements Initializable
     private void handleBackGroundButton() throws IOException {
         File Picture = FullBrowser.display("Background");
         if(Picture != null){
+            Main.files.add(Picture);
+            AddToImportBox(Picture);
             backGroundButton.setText(Picture.getName());
             worldSettings.GetObject().put("background", "assets\\" + Picture.getName());
             worldSettings.Write();
@@ -61,16 +67,15 @@ public class MainLayoutController implements Initializable
     }
     @FXML
     private void HandleImport() throws IOException {
-
-        AddToImportBox(FullBrowser.display("Import Picture"));
+        File file = FullBrowser.display("Import Picture");
+        Main.files.add(file);
+        AddToImportBox(file);
 
     }
-    private void AddToImportBox(File file){
+    public void AddToImportBox(File file){
         if(file != null) {
             ImageView temp = new ImageView();
             temp.setImage(new Image(file.toURI().toString()));
-            temp.setFitWidth(150);
-            temp.setFitHeight(100);
             temp.setOnDragDetected(e ->{
                 Dragboard db = temp.startDragAndDrop(TransferMode.COPY);
                 ClipboardContent content = new ClipboardContent();
@@ -79,9 +84,31 @@ public class MainLayoutController implements Initializable
                 e.consume();
 
             });
-            importFiles.getChildren().add(temp);
+            Main.ReSizePicture(175, 175, temp);
+            VBox tempLayout = new VBox(5);
+            tempLayout.setMaxWidth(175);
+            Label tempName = new Label(file.getName());
+            tempLayout.setAlignment(Pos.CENTER);
+            tempLayout.getChildren().addAll(temp, tempName);
+            importFiles.getChildren().add(tempLayout);
         }
     }
+
+    public void RemoveFile(File file){
+        for(Node layout :importFiles.getChildren()){
+            VBox fullLayout = (VBox)layout;
+            for(Node layoutFile : fullLayout.getChildren()){
+                if(layoutFile instanceof Label)
+                    if(((Label) layoutFile).getText().equals(file.getName())){
+                        importFiles.getChildren().remove(fullLayout);
+                        return;
+                    }
+
+            }
+        }
+    }
+
+
 
 
 

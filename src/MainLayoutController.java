@@ -1,4 +1,6 @@
 import java.io.*;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -7,8 +9,8 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.control.skin.ChoiceBoxSkin;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
@@ -60,15 +62,28 @@ public class MainLayoutController implements Initializable
     @FXML
     private void HandleImport() throws IOException {
 
-        File file = FullBrowser.display("Import Picture");
-        if(file != null){
+        AddToImportBox(FullBrowser.display("Import Picture"));
+
+    }
+    private void AddToImportBox(File file){
+        if(file != null) {
             ImageView temp = new ImageView();
             temp.setImage(new Image(file.toURI().toString()));
             temp.setFitWidth(150);
             temp.setFitHeight(100);
+            temp.setOnDragDetected(e ->{
+                Dragboard db = temp.startDragAndDrop(TransferMode.COPY);
+                ClipboardContent content = new ClipboardContent();
+                content.putFiles(Collections.singletonList(file));
+                db.setContent(content);
+                e.consume();
+
+            });
+            //temp.startDragAndDrop(TransferMode.COPY);
             importFiles.getChildren().add(temp);
         }
     }
+
 
 
     @FXML
@@ -99,11 +114,9 @@ public class MainLayoutController implements Initializable
     {
         worldSettings = new JsonHandler("src\\assets\\GameData.json");
         fullScreenBox.setOnAction(e ->{
-            System.out.println("wad");
             worldSettings.GetObject().put("fullscreen", fullScreenBox.isSelected());
             worldSettings.Write();
         });
-        //importButton.setOnMouseEntered(e -> );
         importFiles.setOnDragOver(this::AcceptFiles);
         importFiles.setOnDragDropped(this::HandleDrop);
 
@@ -154,11 +167,7 @@ public class MainLayoutController implements Initializable
         for(File file : dropFiles){
             if(!Main.ExistsInDir(file, asset_directory)){
                 Main.CopyFile(file, asset_directory);
-                ImageView temp = new ImageView();
-                temp.setImage(new Image(file.toURI().toString()));
-                temp.setFitWidth(150);
-                temp.setFitHeight(100);
-                importFiles.getChildren().add(temp);
+                AddToImportBox(file);
             }
         }
     }

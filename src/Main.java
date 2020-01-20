@@ -5,7 +5,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.stage.Stage;
-import jfxtras.styles.jmetro8.JMetro;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;

@@ -27,7 +27,10 @@ public class MainLayoutController implements Initializable
 {
     @FXML
     private MenuBar menuBar;
-    private int number;
+    @FXML
+    private ScrollPane objectsScroll;
+    @FXML
+    private ListView<String> objectsView;
     @FXML
     private  TextField gravityField;
     @FXML
@@ -143,6 +146,8 @@ public class MainLayoutController implements Initializable
             worldSettings.GetObject().put("fullscreen", fullScreenBox.isSelected());
             worldSettings.Write();
         });
+        objectsView.prefWidthProperty().bind(objectsScroll.widthProperty());
+        objectsView.prefHeightProperty().bind(objectsScroll.heightProperty());
         importFiles.setOnDragOver(this::AcceptFiles);
         importFiles.setOnDragDropped(this::HandleDrop);
 

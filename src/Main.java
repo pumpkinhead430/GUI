@@ -81,6 +81,7 @@ public class Main extends Application
 
     }
 
+
     public static void NumberFilter(TextField field) {
         field.getProperties().put("vkType", "numeric");
         field.setTextFormatter(new TextFormatter<>(c -> {

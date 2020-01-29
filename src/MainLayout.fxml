@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane id="Border" prefHeight="720" prefWidth="1280" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainLayoutController">
+<BorderPane id="Border" fx:id="mainLayout" prefHeight="720" prefWidth="1280" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainLayoutController">
     <top>
     <MenuBar fx:id="menuBar" onKeyPressed="#handleKeyInput">
             <Menu text="File">
@@ -112,9 +112,29 @@
          </children></VBox>
    </bottom>
    <right>
-      <ScrollPane fx:id="objectsScroll" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <ScrollPane fx:id="objectsScrollAdd" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" prefHeight="438.0" prefWidth="331.0" vbarPolicy="NEVER">
          <content>
-            <ListView fx:id="objectsView" />
+            <VBox fx:id="objectsLayout" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="436.0" prefWidth="299.0" spacing="10.0">
+               <children>
+                  <ScrollPane fx:id="objectsScroll" prefHeight="389.0" prefWidth="129.0">
+                     <content>
+                        <ListView fx:id="objectsView" prefHeight="386.0" prefWidth="314.0" />
+                     </content>
+                  </ScrollPane>
+                  <ToolBar prefHeight="40.0" prefWidth="200.0">
+                    <items>
+                      <Button mnemonicParsing="false" onAction="#NewObject" text="Add">
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                        </Button>
+                    </items>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                  </ToolBar>
+               </children>
+            </VBox>
          </content>
       </ScrollPane>
    </right>

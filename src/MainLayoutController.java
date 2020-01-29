@@ -51,7 +51,6 @@ public class MainLayoutController implements Initializable
     private  TextField windowHeightField;
     @FXML
     private  Button backGroundButton;
-
     @FXML
     private CheckBox fullScreenBox;
 
@@ -210,12 +209,21 @@ public class MainLayoutController implements Initializable
     }
 
     @FXML
-    private void NewObject(){
+    private void NewMovableObject(){
         JSONObject temp = new JSONObject();
-        temp.put("name", "nani?");
+        temp.put("name", "i am movable");
+        temp.put("type", "Movable");
         objectsView.getItems().add(temp);
-        for(JSONObject object : objectsView.getItems())
-            System.out.println(object);
+        for(JSONObject j :objectsView.getItems())
+            System.out.println(j);
+    }
+
+    @FXML
+    private void NewStationaryObject(){
+        JSONObject temp = new JSONObject();
+        temp.put("name", "i am stationary");
+        temp.put("type", "Stationary");
+        objectsView.getItems().add(temp);
     }
 
 

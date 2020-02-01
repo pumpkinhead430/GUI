@@ -42,44 +42,45 @@ public class Main extends Application
         scene.getStylesheets().add("Viper.css");
         stage.setScene(scene);
         stage.show();
-          Thread thread =  new Thread(() -> {
-               while (stage.isShowing()) {
+        Thread thread =  new Thread(() -> {
+            while (stage.isShowing()) {
 
-                   Platform.runLater(() -> {
-                       File dir = new File(directory + "\\assets");
-                       if (dir.listFiles() != null) {
-                           for (File file : Objects.requireNonNull(dir.listFiles())) {
-                               if (!files.contains(file)) {
-                                   if (Main.IsPicture(file.getName())) {
-                                       files.add(file);
-                                       controller.AddToImportBox(file);
-                                   }
-                               }
-                           }
-                           ArrayList<File>filesToRemove = new ArrayList<>();
-                           for(File file : files){
-                               if(!file.exists()){
-                                   filesToRemove.add(file);
-                                   controller.RemoveFile(file);
-                               }
-                           }
-                           files.removeAll(filesToRemove);
-                       }
+                Platform.runLater(() -> {
+                    File dir = new File(directory + "\\assets");
+                    if (dir.listFiles() != null) {
+                        for (File file : Objects.requireNonNull(dir.listFiles())) {
+                            if (!files.contains(file)) {
+                                if (Main.IsPicture(file.getName())) {
+                                    files.add(file);
+                                    controller.AddToImportBox(file);
+                                }
+                            }
+                        }
+                        ArrayList<File>filesToRemove = new ArrayList<>();
+                        for(File file : files){
+                            if(!file.exists()){
+                                filesToRemove.add(file);
+                                controller.RemoveFile(file);
+                            }
+                        }
+                        files.removeAll(filesToRemove);
+                    }
 
-                   });
-                   try {
-                       TimeUnit.SECONDS.sleep(2);
-                   } catch (InterruptedException e) {
-                       e.printStackTrace();
-                   }
-               }
-           });
-          thread.start();
+                });
+                try {
+                    TimeUnit.SECONDS.sleep(2);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        thread.start();
         //DirectoryHandler dirHandler = new DirectoryHandler(loader.getController(), stage, new File(directory + "\\assets"));
-       //Thread thread = new Thread(dirHandler);
-       //thread.start();
+        //Thread thread = new Thread(dirHandler);
+        //thread.start();
 
     }
+
 
     public static void NumberFilter(TextField field) {
         field.getProperties().put("vkType", "numeric");

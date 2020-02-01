@@ -1,21 +1,26 @@
 import java.io.*;
+import java.lang.reflect.Array;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.stage.Stage;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -30,11 +35,17 @@ public class MainLayoutController implements Initializable
     @FXML
     private ScrollPane objectsScroll;
     @FXML
-    private ListView<String> objectsView;
+    private ListView<JSONObject> objectsView;
     @FXML
     private  TextField gravityField;
     @FXML
     private Button importButton;
+    @FXML
+    private ScrollPane objectsScrollAdd;
+    @FXML
+    private BorderPane mainLayout;
+    @FXML
+    private VBox objectsLayout;
     @FXML
     private  TextField titleField;
     @FXML
@@ -43,11 +54,12 @@ public class MainLayoutController implements Initializable
     private  TextField windowHeightField;
     @FXML
     private  Button backGroundButton;
-
     @FXML
     private CheckBox fullScreenBox;
-
-    @FXML private HBox importFiles;
+    @FXML
+    private  ScrollPane importScroll;
+    @FXML
+    private TilePane importFiles;
 
     private JsonHandler worldSettings;
     @FXML
@@ -60,8 +72,10 @@ public class MainLayoutController implements Initializable
     private void handleBackGroundButton() throws IOException {
         File Picture = FullBrowser.display("Background");
         if(Picture != null){
-            Main.files.add(Picture);
-            AddToImportBox(Picture);
+            if(!Main.files.contains(Picture)) {
+                Main.files.add(Picture);
+                AddToImportBox(Picture);
+            }
             backGroundButton.setText(Picture.getName());
             worldSettings.GetObject().put("background", "assets\\" + Picture.getName());
             worldSettings.Write();
@@ -71,9 +85,10 @@ public class MainLayoutController implements Initializable
     @FXML
     private void HandleImport() throws IOException {
         File file = FullBrowser.display("Import Picture");
-        Main.files.add(file);
-        AddToImportBox(file);
-
+        if(!Main.files.contains(file)){
+            Main.files.add(file);
+            AddToImportBox(file);
+        }
     }
     public void AddToImportBox(File file){
         if(file != null) {
@@ -139,13 +154,41 @@ public class MainLayoutController implements Initializable
 
 
     @Override
-    public void initialize(java.net.URL arg0, ResourceBundle arg1)
-    {
+    public void initialize(java.net.URL arg0, ResourceBundle arg1) {
+        objectsView.setOnMouseClicked(this::handleListClicked);
+        objectsLayout.prefHeightProperty().bind(objectsScrollAdd.heightProperty());
+        objectsLayout.prefWidthProperty().bind(objectsScrollAdd.widthProperty());
+
+        importFiles.prefHeightProperty().bind(importScroll.heightProperty());
+        importFiles.prefWidthProperty().bind(importScroll.widthProperty());
+
+
+        for(Node node: objectsLayout.getChildren()){
+            VBox.setVgrow(node, Priority.ALWAYS);
+        }
         worldSettings = new JsonHandler("src\\assets\\GameData.json");
         fullScreenBox.setOnAction(e ->{
             worldSettings.GetObject().put("fullscreen", fullScreenBox.isSelected());
             worldSettings.Write();
         });
+
+
+
+        objectsView.setCellFactory(param -> new ListCell<>() {
+            @Override
+            protected void updateItem(JSONObject item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || item == null || item.get("name").toString() == null) {
+                    setText(null);
+                } else {
+                    setText(item.get("name").toString());
+                }
+            }
+        });
+
+
+
         objectsView.prefWidthProperty().bind(objectsScroll.widthProperty());
         objectsView.prefHeightProperty().bind(objectsScroll.heightProperty());
         importFiles.setOnDragOver(this::AcceptFiles);
@@ -175,6 +218,36 @@ public class MainLayoutController implements Initializable
 
     }
 
+    @FXML
+    private void NewMovableObject(){
+        JSONObject temp = new JSONObject();
+        temp.put("name", "temp(Movable)");
+        temp.put("type", "Movable");
+        temp.put("health", 0);
+        temp.put("x", 0);
+        temp.put("y", 0);
+        JSONObject tempAnimation = new JSONObject();
+        tempAnimation.put("defult", "defult");
+        temp.put("animations", tempAnimation);
+        objectsView.getItems().add(temp);
+        System.out.println(temp);
+    }
+
+    @FXML
+    private void NewStationaryObject(){
+        JSONObject temp = new JSONObject();
+        temp.put("name", "temp(Stationary)");
+        temp.put("type", "Stationary");
+        temp.put("x", 0);
+        temp.put("y", 0);
+        temp.put("damage", 0);
+        JSONArray ani_start = new JSONArray();
+        temp.put("ani_start",ani_start);
+        objectsView.getItems().add(temp);
+    }
+
+
+
 
     public void AcceptFiles(DragEvent event){
         if (event.getDragboard().hasFiles()) {
@@ -193,14 +266,29 @@ public class MainLayoutController implements Initializable
     }
 
     public void HandleDrop(DragEvent event){
-       List<File> dropFiles = event.getDragboard().getFiles();
+        List<File> dropFiles = event.getDragboard().getFiles();
         File asset_directory = new File(Main.directory + "\\assets");
         for(File file : dropFiles){
-            if(!Main.ExistsInDir(file, asset_directory)){
+            if(!Main.files.contains(file)){
+                Main.files.add(file);
                 Main.CopyFile(file, asset_directory);
                 AddToImportBox(file);
             }
         }
+    }
+
+    public void handleListClicked(MouseEvent mouseEvent){
+        if(mouseEvent.getClickCount() == 2){
+            JSONObject SelectedObject = objectsView.getSelectionModel().getSelectedItem();
+            System.out.println(SelectedObject);
+            try {
+                FullBrowser.display("nan");
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        }
+
     }
 
 

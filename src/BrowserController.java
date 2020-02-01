@@ -32,9 +32,9 @@ public class BrowserController implements Initializable {
         browseTree.setRoot(root);
         for(File path:File.listRoots())
         {
-           TreeItem<String> parentItem = new TreeItem<>(path.getPath());
-           parentItem.expandedProperty().addListener((observableValue, aBoolean, t1) -> AddExpansionProperty(observableValue, t1));
-           browseTree.getRoot().getChildren().add(parentItem);
+            TreeItem<String> parentItem = new TreeItem<>(path.getPath());
+            parentItem.expandedProperty().addListener((observableValue, aBoolean, t1) -> AddExpansionProperty(observableValue, t1));
+            browseTree.getRoot().getChildren().add(parentItem);
             File dir = new File(path.getPath());
             if(dir.isDirectory()) {
                 handleExpanded(parentItem);
@@ -60,7 +60,7 @@ public class BrowserController implements Initializable {
     public void handleExpanded(TreeItem<String> newValue)
     {
         File treeFile = GetFileFromNode(newValue);
-       LoadLevels(2, newValue);
+        LoadLevels(2, newValue);
         if(treeFile.isFile() && Main.IsPicture(treeFile.getName()))
         {
             Stage thisWindow = (Stage)browseTree.getScene().getWindow();
@@ -88,15 +88,15 @@ public class BrowserController implements Initializable {
 
     }
     public void LoadLevels(int amount, TreeItem<String> currentItem){
-       if(amount != 0) {
-           if(GetFileFromNode(currentItem).isDirectory())
-               if (currentItem.isLeaf()) {
-                   LoadBranch(currentItem, GetFileFromNode(currentItem));
-               }
-           for (TreeItem<String> child : currentItem.getChildren()) {
-               LoadLevels(amount - 1, child);
-           }
-       }
+        if(amount != 0) {
+            if(GetFileFromNode(currentItem).isDirectory())
+                if (currentItem.isLeaf()) {
+                    LoadBranch(currentItem, GetFileFromNode(currentItem));
+                }
+            for (TreeItem<String> child : currentItem.getChildren()) {
+                LoadLevels(amount - 1, child);
+            }
+        }
     }
 
     public File GetFileFromNode(TreeItem<String> newValue){

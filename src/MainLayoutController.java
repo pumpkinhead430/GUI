@@ -14,8 +14,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -30,11 +29,17 @@ public class MainLayoutController implements Initializable
     @FXML
     private ScrollPane objectsScroll;
     @FXML
-    private ListView<String> objectsView;
+    private ListView<JSONObject> objectsView;
     @FXML
     private  TextField gravityField;
     @FXML
     private Button importButton;
+    @FXML
+    private ScrollPane objectsScrollAdd;
+    @FXML
+    private BorderPane mainLayout;
+    @FXML
+    private VBox objectsLayout;
     @FXML
     private  TextField titleField;
     @FXML
@@ -43,12 +48,12 @@ public class MainLayoutController implements Initializable
     private  TextField windowHeightField;
     @FXML
     private  Button backGroundButton;
-
     @FXML
     private CheckBox fullScreenBox;
-
-    @FXML private HBox importFiles;
-
+    @FXML
+    private ScrollPane importScroll;
+    @FXML
+    private TilePane importFiles;
     private JsonHandler worldSettings;
     @FXML
     private void handleAboutAction(final ActionEvent event)
@@ -60,8 +65,10 @@ public class MainLayoutController implements Initializable
     private void handleBackGroundButton() throws IOException {
         File Picture = FullBrowser.display("Background");
         if(Picture != null){
-            Main.files.add(Picture);
-            AddToImportBox(Picture);
+            if(!Main.files.contains(Picture)) {
+                Main.files.add(Picture);
+                AddToImportBox(Picture);
+            }
             backGroundButton.setText(Picture.getName());
             worldSettings.GetObject().put("background", "assets\\" + Picture.getName());
             worldSettings.Write();
@@ -71,9 +78,10 @@ public class MainLayoutController implements Initializable
     @FXML
     private void HandleImport() throws IOException {
         File file = FullBrowser.display("Import Picture");
-        Main.files.add(file);
-        AddToImportBox(file);
-
+        if(!Main.files.contains(file)){
+            Main.files.add(file);
+            AddToImportBox(file);
+        }
     }
     public void AddToImportBox(File file){
         if(file != null) {
@@ -141,11 +149,37 @@ public class MainLayoutController implements Initializable
     @Override
     public void initialize(java.net.URL arg0, ResourceBundle arg1)
     {
+        objectsLayout.prefHeightProperty().bind(objectsScrollAdd.heightProperty());
+        objectsLayout.prefWidthProperty().bind(objectsScrollAdd.widthProperty());
+
+        importFiles.prefHeightProperty().bind(importScroll.heightProperty());
+        importFiles.prefWidthProperty().bind(importScroll.widthProperty());
+        for(Node node: objectsLayout.getChildren()){
+            VBox.setVgrow(node, Priority.ALWAYS);
+        }
         worldSettings = new JsonHandler("src\\assets\\GameData.json");
         fullScreenBox.setOnAction(e ->{
             worldSettings.GetObject().put("fullscreen", fullScreenBox.isSelected());
             worldSettings.Write();
         });
+
+
+
+        objectsView.setCellFactory(param -> new ListCell<>() {
+            @Override
+            protected void updateItem(JSONObject item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || item == null || item.get("name").toString() == null) {
+                    setText(null);
+                } else {
+                    setText(item.get("name").toString());
+                }
+            }
+        });
+
+
+
         objectsView.prefWidthProperty().bind(objectsScroll.widthProperty());
         objectsView.prefHeightProperty().bind(objectsScroll.heightProperty());
         importFiles.setOnDragOver(this::AcceptFiles);
@@ -175,6 +209,26 @@ public class MainLayoutController implements Initializable
 
     }
 
+    @FXML
+    private void NewMovableObject(){
+        JSONObject temp = new JSONObject();
+        temp.put("name", "i am movable");
+        temp.put("type", "Movable");
+        objectsView.getItems().add(temp);
+        for(JSONObject j :objectsView.getItems())
+            System.out.println(j);
+    }
+
+    @FXML
+    private void NewStationaryObject(){
+        JSONObject temp = new JSONObject();
+        temp.put("name", "i am stationary");
+        temp.put("type", "Stationary");
+        objectsView.getItems().add(temp);
+    }
+
+
+
 
     public void AcceptFiles(DragEvent event){
         if (event.getDragboard().hasFiles()) {
@@ -193,10 +247,11 @@ public class MainLayoutController implements Initializable
     }
 
     public void HandleDrop(DragEvent event){
-       List<File> dropFiles = event.getDragboard().getFiles();
+        List<File> dropFiles = event.getDragboard().getFiles();
         File asset_directory = new File(Main.directory + "\\assets");
         for(File file : dropFiles){
-            if(!Main.ExistsInDir(file, asset_directory)){
+            if(!Main.files.contains(file)){
+                Main.files.add(file);
                 Main.CopyFile(file, asset_directory);
                 AddToImportBox(file);
             }

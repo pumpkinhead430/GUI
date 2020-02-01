@@ -15,6 +15,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
+import javafx.stage.Stage;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -179,7 +181,7 @@ public class MainLayoutController implements Initializable
         });
 
 
-
+        objectsView.setOnMouseClicked(this::HandleObjectClick);
         objectsView.prefWidthProperty().bind(objectsScroll.widthProperty());
         objectsView.prefHeightProperty().bind(objectsScroll.heightProperty());
         importFiles.setOnDragOver(this::AcceptFiles);
@@ -212,21 +214,41 @@ public class MainLayoutController implements Initializable
     @FXML
     private void NewMovableObject(){
         JSONObject temp = new JSONObject();
-        temp.put("name", "i am movable");
+        temp.put("name", "temp(Movable)");
         temp.put("type", "Movable");
+        temp.put("health", 0);
+        temp.put("x", 0);
+        temp.put("y", 0);
+        JSONArray animations = new JSONArray();
+        JSONObject animation = new JSONObject();
+        animation.put("defult", "defult");
+        animations.add(animation);
+        temp.put("animations", animations);
         objectsView.getItems().add(temp);
-        for(JSONObject j :objectsView.getItems())
-            System.out.println(j);
     }
 
     @FXML
     private void NewStationaryObject(){
         JSONObject temp = new JSONObject();
-        temp.put("name", "i am stationary");
-        temp.put("type", "Stationary");
+        temp.put("name", "temp(Stationery)");
+        temp.put("type", "Stationery");
+        temp.put("damage", 0);
+        temp.put("x", 0);
+        temp.put("y", 0);
+        temp.put("path", "");
+        JSONArray ani_start = new JSONArray();
+        temp.put("ani_start",ani_start);
         objectsView.getItems().add(temp);
     }
 
+    public void HandleObjectClick(MouseEvent mouseEvent){
+        if(mouseEvent.getClickCount() == 2){
+            JSONObject object = objectsView.getSelectionModel().getSelectedItem();
+            if(object != null) {
+                System.out.println(object);
+                }
+            }
+        }
 
 
 

@@ -116,16 +116,11 @@ public class Main extends Application
     public static void CopyFile(File src, File dest){
         if (src.exists() && dest.exists()) {
             try {
-                files.add(new File(dest.getPath() + "\\" + src.getName()));
                 FileUtils.copyFileToDirectory(src, dest);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-    }
-    public static Boolean ExistsInDir(File file, File dir){
-        File checkFile = new File(dir.getPath() + "\\" + file.getName());
-        return checkFile.exists();
     }
 
     public static void ReSizePicture(double maxWidth, double maxHeight, ImageView image){

@@ -64,12 +64,11 @@ public class MainLayoutController implements Initializable
     }
 
     @FXML
-    private void handleBackGroundButton() throws IOException {
+    private void handleBackGroundButton() {
         File Picture = FullBrowser.display("Background");
         if(Picture != null){
             if(!Main.files.contains(Picture)) {
-                Main.files.add(Picture);
-                AddToImportBox(Picture);
+               Main.CopyFile(Picture, new File(Main.directory + "\\assets"));
             }
             backGroundButton.setText(Picture.getName());
             worldSettings.GetObject().put("background", "assets\\" + Picture.getName());
@@ -81,8 +80,7 @@ public class MainLayoutController implements Initializable
     private void HandleImport() throws IOException {
         File file = FullBrowser.display("Import Picture");
         if(!Main.files.contains(file)){
-            Main.files.add(file);
-            AddToImportBox(file);
+            Main.CopyFile(file, new File(Main.directory + "\\assets"));
         }
     }
     public void AddToImportBox(File file){
@@ -241,12 +239,12 @@ public class MainLayoutController implements Initializable
         objectsView.getItems().add(temp);
     }
 
-    public void HandleObjectClick(MouseEvent mouseEvent){
+    public void HandleObjectClick(MouseEvent mouseEvent) {
         if(mouseEvent.getClickCount() == 2){
             JSONObject object = objectsView.getSelectionModel().getSelectedItem();
             if(object != null) {
-                System.out.println(object);
-                }
+                    Stationery.display("nn");
+            }
             }
         }
 
@@ -273,9 +271,7 @@ public class MainLayoutController implements Initializable
         File asset_directory = new File(Main.directory + "\\assets");
         for(File file : dropFiles){
             if(!Main.files.contains(file)){
-                Main.files.add(file);
                 Main.CopyFile(file, asset_directory);
-                AddToImportBox(file);
             }
         }
     }

@@ -1,37 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<SplitPane dividerPositions="0.7" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
-  <items>
-      <ImageView fitHeight="398.0" fitWidth="389.0" pickOnBounds="true" preserveRatio="true" />
-      <ScrollPane prefHeight="398.0" prefWidth="101.0">
+
+<BorderPane prefHeight="480.0" prefWidth="720.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="StationeryLayoutController">
+   <right>
+      <ScrollPane fx:id="propertyScroll" prefHeight="480.0" prefWidth="255.0" BorderPane.alignment="CENTER">
          <content>
-            <GridPane prefHeight="223.0" prefWidth="203.0">
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="94.0" minWidth="10.0" prefWidth="71.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="132.0" minWidth="10.0" prefWidth="132.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <GridPane fx:id="propertyGrid" prefHeight="223.0" prefWidth="203.0">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="94.0" minWidth="10.0" prefWidth="71.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="132.0" minWidth="10.0" prefWidth="132.0" />
+               </columnConstraints>
+               <rowConstraints>
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
                <children>
                   <TextField prefHeight="25.0" prefWidth="79.0" GridPane.columnIndex="1" />
                   <Label prefHeight="17.0" prefWidth="74.0" text="Damage:" />
                   <Label text="Picture:" GridPane.rowIndex="1" />
-                  <Button mnemonicParsing="false" prefHeight="32.0" prefWidth="88.0" text="Browse" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Button fx:id="browse1" mnemonicParsing="false" onAction="#handlePictureButton" prefHeight="32.0" prefWidth="88.0" text="Browse" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <Label text="Position X:" GridPane.rowIndex="2" />
                   <Label text="Position Y:" GridPane.rowIndex="3" />
                   <TextField GridPane.columnIndex="1" GridPane.rowIndex="3" />
                   <TextField GridPane.columnIndex="1" GridPane.rowIndex="2" />
                </children>
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
             </GridPane>
          </content>
       </ScrollPane>
-  </items>
-</SplitPane>
+   </right>
+   <center>
+      <ImageView fx:id="objectImage" fitHeight="480.0" fitWidth="466.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER" />
+   </center>
+</BorderPane>

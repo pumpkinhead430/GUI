@@ -219,7 +219,7 @@ public class MainLayoutController implements Initializable
         temp.put("y", 0);
         JSONArray animations = new JSONArray();
         JSONObject animation = new JSONObject();
-        animation.put("defult", "defult");
+        animation.put("default", "default");
         animations.add(animation);
         temp.put("animations", animations);
         objectsView.getItems().add(temp);

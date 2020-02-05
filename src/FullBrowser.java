@@ -29,7 +29,8 @@ public class FullBrowser {
             File selectedFile = browserController.GetFile();
             if (selectedFile != null) {
                 File assetsDir = new File(Main.directory + "\\assets");
-                File dest = new File(assetsDir.getName() + selectedFile.getName());
+                File dest = new File(assetsDir.getPath() + "\\" + selectedFile.getName());
+                System.out.println(dest + " awdwadgrhtrfr");
                 if (!dest.exists()) {
                     Main.CopyFile(selectedFile, assetsDir);
                 }

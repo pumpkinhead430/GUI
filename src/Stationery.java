@@ -9,7 +9,7 @@ public class Stationery {
     public static void display(String title){
         try {
             Stage window = new Stage();
-            window.initModality(Modality.APPLICATION_MODAL);
+            //window.initModality(Modality.WINDOW_MODAL);
             window.setTitle(title);
             window.setMinHeight(300);
             window.setMinWidth(300);
@@ -19,7 +19,11 @@ public class Stationery {
             Scene scene = new Scene(root);
             scene.getStylesheets().add("Viper.css");
             window.setScene(scene);
-            window.showAndWait();
+            window.setOnCloseRequest(e ->{
+                System.out.println("nawdafeg");
+            });
+            window.setAlwaysOnTop(true);
+                window.showAndWait();
         }
         catch (IOException e){
             e.printStackTrace();

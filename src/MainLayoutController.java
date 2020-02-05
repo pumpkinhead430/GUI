@@ -77,24 +77,24 @@ public class MainLayoutController implements Initializable
 
     }
     @FXML
-    private void HandleImport() throws IOException {
+    private void HandleImport() {
         File file = FullBrowser.display("Import Picture");
-        if(!Main.files.contains(file)){
+        if (!Main.files.contains(file))
             Main.CopyFile(file, new File(Main.directory + "\\assets"));
-        }
     }
     public void AddToImportBox(File file){
         if(file != null) {
             ImageView temp = new ImageView();
             temp.setImage(new Image(file.toURI().toString()));
+            temp.setPickOnBounds(true);
             temp.setOnDragDetected(e ->{
                 Dragboard db = temp.startDragAndDrop(TransferMode.COPY);
                 ClipboardContent content = new ClipboardContent();
                 content.putFiles(Collections.singletonList(file));
                 db.setContent(content);
                 e.consume();
-
             });
+
             Main.ReSizePicture(175, 175, temp);
             VBox tempLayout = new VBox(5);
             tempLayout.setMaxWidth(175);

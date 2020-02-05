@@ -114,11 +114,14 @@ public class Main extends Application
         return false;
     }
     public static void CopyFile(File src, File dest){
-        if (src.exists() && dest.exists()) {
-            try {
-                FileUtils.copyFileToDirectory(src, dest);
-            } catch (IOException e) {
-                e.printStackTrace();
+        if(src != null && dest != null) {
+            if (src.exists() && dest.exists()) {
+                try {
+                    System.out.println(src + " " + dest);
+                    FileUtils.copyFileToDirectory(src, dest);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

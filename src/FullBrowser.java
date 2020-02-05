@@ -25,12 +25,12 @@ public class FullBrowser {
             Scene scene = new Scene(root);
             scene.getStylesheets().add("Viper.css");
             window.setScene(scene);
+            window.setAlwaysOnTop(true);
             window.showAndWait();
             File selectedFile = browserController.GetFile();
             if (selectedFile != null) {
                 File assetsDir = new File(Main.directory + "\\assets");
                 File dest = new File(assetsDir.getPath() + "\\" + selectedFile.getName());
-                System.out.println(dest + " awdwadgrhtrfr");
                 if (!dest.exists()) {
                     Main.CopyFile(selectedFile, assetsDir);
                 }

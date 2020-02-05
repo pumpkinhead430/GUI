@@ -75,10 +75,6 @@ public class Main extends Application
             }
         });
         thread.start();
-        //DirectoryHandler dirHandler = new DirectoryHandler(loader.getController(), stage, new File(directory + "\\assets"));
-        //Thread thread = new Thread(dirHandler);
-        //thread.start();
-
     }
 
 

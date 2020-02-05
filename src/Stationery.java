@@ -19,11 +19,8 @@ public class Stationery {
             Scene scene = new Scene(root);
             scene.getStylesheets().add("Viper.css");
             window.setScene(scene);
-            window.setOnCloseRequest(e ->{
-                System.out.println("nawdafeg");
-            });
             window.setAlwaysOnTop(true);
-                window.showAndWait();
+            window.showAndWait();
         }
         catch (IOException e){
             e.printStackTrace();

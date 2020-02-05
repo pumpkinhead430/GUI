@@ -53,8 +53,6 @@ public class StationeryLayoutController implements Initializable {
         objectImage.setOnDragOver(this::AcceptFiles);
         objectImage.setOnDragDropped(this::HandleDrop);
         propertyGrid.prefWidthProperty().bind(propertyScroll.widthProperty());
-        //SplitPane.Divider divider = mainLayout.getDividers().get(0);
-        //divider.positionProperty().addListener((observable, oldvalue, newvalue) -> divider.setPosition((Double) newvalue));
     }
 
 

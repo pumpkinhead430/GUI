@@ -5,12 +5,15 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SplitPane;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import netscape.javascript.JSObject;
+import org.json.simple.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,6 +22,15 @@ import java.util.ResourceBundle;
 
 public class StationeryLayoutController implements Initializable {
 
+    private JsonHandler stationeryObjects;
+    @FXML
+    private TextField nameField;
+    @FXML
+    private TextField damageField;
+    @FXML
+    private TextField PYField;
+    @FXML
+    private TextField PXField;
     @FXML
     private ScrollPane propertyScroll;
     @FXML
@@ -40,11 +52,11 @@ public class StationeryLayoutController implements Initializable {
             browse.setText(Picture.getName());
             objectImage.setImage(new Image(Picture.toURI().toString()));
             }
-
-
         }
 
-
+    StationeryLayoutController(JsonHandler objects_json){
+        this.stationeryObjects =  objects_json;
+    }
     @Override
     public void initialize(java.net.URL arg0, ResourceBundle arg1)
     {
@@ -53,6 +65,11 @@ public class StationeryLayoutController implements Initializable {
         objectImage.setOnDragOver(this::AcceptFiles);
         objectImage.setOnDragDropped(this::HandleDrop);
         propertyGrid.prefWidthProperty().bind(propertyScroll.widthProperty());
+        Main.NumberFilter(damageField);
+        Main.NumberFilter(PYField);
+        Main.NumberFilter(PXField);
+        damageField.textProperty().addListener((observable, oldValue, newValue) -> {
+        });
     }
 
 

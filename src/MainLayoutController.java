@@ -243,7 +243,7 @@ public class MainLayoutController implements Initializable
         if(mouseEvent.getClickCount() == 2){
             JSONObject object = objectsView.getSelectionModel().getSelectedItem();
             if(object != null) {
-                    Stationery.display("nn");
+                    Stationery.display("nn", object);
             }
             }
         }

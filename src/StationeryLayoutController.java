@@ -22,7 +22,7 @@ import java.util.ResourceBundle;
 
 public class StationeryLayoutController implements Initializable {
 
-    private JsonHandler stationeryObjects;
+    private JSONObject stationeryObject;
     @FXML
     private TextField nameField;
     @FXML
@@ -54,9 +54,6 @@ public class StationeryLayoutController implements Initializable {
             }
         }
 
-    StationeryLayoutController(JsonHandler objects_json){
-        this.stationeryObjects =  objects_json;
-    }
     @Override
     public void initialize(java.net.URL arg0, ResourceBundle arg1)
     {
@@ -68,10 +65,10 @@ public class StationeryLayoutController implements Initializable {
         Main.NumberFilter(damageField);
         Main.NumberFilter(PYField);
         Main.NumberFilter(PXField);
-        damageField.textProperty().addListener((observable, oldValue, newValue) -> {
-        });
     }
-
+    public void SetJson(JSONObject object){
+        this.stationeryObject = object;
+    }
 
     public void AcceptFiles(DragEvent event){
         if (event.getDragboard().hasFiles()) {

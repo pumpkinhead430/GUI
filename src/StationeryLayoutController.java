@@ -62,6 +62,9 @@ public class StationeryLayoutController implements Initializable {
         objectImage.setOnDragOver(this::AcceptFiles);
         objectImage.setOnDragDropped(this::HandleDrop);
         propertyGrid.prefWidthProperty().bind(propertyScroll.widthProperty());
+        nameField.textProperty().addListener((observable, oldValue, newValue) -> {
+            stationeryObject.put("name", newValue);
+                });
         Main.NumberFilter(damageField);
         Main.NumberFilter(PYField);
         Main.NumberFilter(PXField);

@@ -3,6 +3,8 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -32,6 +34,7 @@ public class MainLayoutController implements Initializable
     private ScrollPane objectsScroll;
     @FXML
     private ListView<JSONObject> objectsView;
+    private ObservableList<JSONObject> objectsList;
     @FXML
     private  TextField gravityField;
     @FXML
@@ -149,6 +152,7 @@ public class MainLayoutController implements Initializable
     @Override
     public void initialize(java.net.URL arg0, ResourceBundle arg1)
     {
+        objectsList =  FXCollections.observableArrayList();
         objectsLayout.prefHeightProperty().bind(objectsScrollAdd.heightProperty());
         objectsLayout.prefWidthProperty().bind(objectsScrollAdd.widthProperty());
 
@@ -164,7 +168,7 @@ public class MainLayoutController implements Initializable
         });
 
 
-
+        objectsView.setItems(objectsList);
         objectsView.setCellFactory(param -> new ListCell<>() {
             @Override
             protected void updateItem(JSONObject item, boolean empty) {
@@ -222,7 +226,7 @@ public class MainLayoutController implements Initializable
         animation.put("default", "default");
         animations.add(animation);
         temp.put("animations", animations);
-        objectsView.getItems().add(temp);
+        objectsList.add(temp);
     }
 
     @FXML
@@ -236,7 +240,7 @@ public class MainLayoutController implements Initializable
         temp.put("path", "");
         JSONArray ani_start = new JSONArray();
         temp.put("ani_start",ani_start);
-        objectsView.getItems().add(temp);
+        objectsList.add(temp);
     }
 
     public void HandleObjectClick(MouseEvent mouseEvent) {
@@ -244,10 +248,11 @@ public class MainLayoutController implements Initializable
             JSONObject object = objectsView.getSelectionModel().getSelectedItem();
             if(object != null) {
                     Stationery.display("nn", object);
+                    System.out.println(objectsList.get(0));
+                    objectsView.refresh();
             }
             }
         }
-
 
 
     public void AcceptFiles(DragEvent event){

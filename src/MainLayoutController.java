@@ -60,6 +60,7 @@ public class MainLayoutController implements Initializable
     @FXML
     private TilePane importFiles;
     private JsonHandler worldSettings;
+    private JsonHandler objectData;
     @FXML
     private void handleAboutAction(final ActionEvent event)
     {
@@ -162,6 +163,8 @@ public class MainLayoutController implements Initializable
             VBox.setVgrow(node, Priority.ALWAYS);
         }
         worldSettings = new JsonHandler("src\\assets\\GameData.json");
+        objectData = new JsonHandler("src\\assets\\objects.json");
+        BringObjects(objectData, objectsList);
         fullScreenBox.setOnAction(e ->{
             worldSettings.GetObject().put("fullscreen", fullScreenBox.isSelected());
             worldSettings.Write();
@@ -213,6 +216,20 @@ public class MainLayoutController implements Initializable
 
     }
 
+    private void BringObjects(JsonHandler objectData, ObservableList<JSONObject> objectsList) {
+        JSONObject main = objectData.GetObject();
+        JSONArray movables = (JSONArray) main.get("Movables");
+        for (Object movable : movables) {
+            objectsList.add((JSONObject) movable);
+        }
+        JSONArray stationers = (JSONArray) main.get("Stationers");
+        for (Object stationery : stationers) {
+            objectsList.add((JSONObject) stationery);
+        }
+    }
+
+
+
     @FXML
     private void NewMovableObject(){
         JSONObject temp = new JSONObject();
@@ -226,6 +243,7 @@ public class MainLayoutController implements Initializable
         animation.put("default", "default");
         animations.add(animation);
         temp.put("animations", animations);
+        ((JSONArray)objectData.GetObject().get("Movables")).add(temp);
         objectsList.add(temp);
     }
 
@@ -240,6 +258,7 @@ public class MainLayoutController implements Initializable
         temp.put("path", "");
         JSONArray ani_start = new JSONArray();
         temp.put("ani_start",ani_start);
+        ((JSONArray)objectData.GetObject().get("Stationers")).add(temp);
         objectsList.add(temp);
     }
 
@@ -248,9 +267,9 @@ public class MainLayoutController implements Initializable
             JSONObject object = objectsView.getSelectionModel().getSelectedItem();
             if(object != null) {
                     Stationery.display("nn", object);
-                    System.out.println(objectsList.get(0));
                     objectsView.refresh();
-            }
+                    objectData.Write();
+                }
             }
         }
 

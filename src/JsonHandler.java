@@ -32,6 +32,9 @@ public class JsonHandler {
         }
 
     }
+    public void SetObject(JSONObject object){
+        this.jsonObject = object;
+    }
     public JSONObject GetObject(){
         return jsonObject;
     }

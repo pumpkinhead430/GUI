@@ -6,7 +6,7 @@
       "y": 0,
       "animations": [
         {
-          "defult": "defult"
+          "default": "default"
         },
         {
           "trigger": 22,
@@ -35,7 +35,7 @@
       "y": 60,
       "animations": [
         {
-          "defult": "defult"
+          "default": "default"
         },
         {
           "trigger": 26,
@@ -69,16 +69,23 @@
           "forcex": 10,
           "name": "MoveRight",
           "ani_starter": [ "", "" ],
-          "frames": [ "assets/defult.png" ],
+          "frames": [ "assets/default.png" ],
           "damage": 0
         }
       ]
     }
   ],
-  "stationeries": [
+  "stationers": [
     {
       "damage": 0,
-      "path": "assets/defult.png",
+      "path": "assets/default.png",
+      "x": 0,
+      "y": 500,
+      "ani_start": [ "", "" ]
+    },
+    {
+      "damage": 0,
+      "path": "assets/default.png",
       "x": 0,
       "y": 500,
       "ani_start": [ "", "" ]

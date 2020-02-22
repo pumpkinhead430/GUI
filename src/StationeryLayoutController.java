@@ -34,8 +34,6 @@ public class StationeryLayoutController implements Initializable {
     @FXML
     private ScrollPane propertyScroll;
     @FXML
-    private SplitPane mainLayout;
-    @FXML
     private ImageView objectImage;
     @FXML
     private GridPane propertyGrid;
@@ -66,8 +64,21 @@ public class StationeryLayoutController implements Initializable {
             stationeryObject.put("name", newValue);
                 });
         Main.NumberFilter(damageField);
+
+        nameField.textProperty().addListener((observable, oldValue, newValue) -> {
+            stationeryObject.put("name", newValue);
+        });
+        damageField.textProperty().addListener((observable, oldValue, newValue) -> {
+            stationeryObject.put("damage", newValue);
+        });
         Main.NumberFilter(PYField);
+        PYField.textProperty().addListener((observable, oldValue, newValue) -> {
+            stationeryObject.put("y", newValue);
+        });
         Main.NumberFilter(PXField);
+        PXField.textProperty().addListener((observable, oldValue, newValue) -> {
+            stationeryObject.put("x", newValue);
+        });
     }
     public void SetJson(JSONObject object){
         this.stationeryObject = object;

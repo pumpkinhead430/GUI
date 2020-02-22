@@ -3,6 +3,8 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -32,7 +34,7 @@ public class MainLayoutController implements Initializable
     private ScrollPane objectsScroll;
     @FXML
     private ListView<JSONObject> objectsView;
-    private JsonHandler objectData;
+    private ObservableList<JSONObject> objectsList;
     @FXML
     private  TextField gravityField;
     @FXML
@@ -57,8 +59,8 @@ public class MainLayoutController implements Initializable
     private ScrollPane importScroll;
     @FXML
     private TilePane importFiles;
-    private ArrayList<JSONObject> stationersObjects;
     private JsonHandler worldSettings;
+    private JsonHandler objectData;
     @FXML
     private void handleAboutAction(final ActionEvent event)
     {
@@ -70,7 +72,7 @@ public class MainLayoutController implements Initializable
         File Picture = FullBrowser.display("Background");
         if(Picture != null){
             if(!Main.files.contains(Picture)) {
-               Main.CopyFile(Picture, new File(Main.directory + "\\assets"));
+                Main.CopyFile(Picture, new File(Main.directory + "\\assets"));
             }
             backGroundButton.setText(Picture.getName());
             worldSettings.GetObject().put("background", "assets\\" + Picture.getName());
@@ -122,6 +124,9 @@ public class MainLayoutController implements Initializable
     }
 
 
+
+
+
     @FXML
     private void handleKeyInput(final InputEvent event)
     {
@@ -148,6 +153,7 @@ public class MainLayoutController implements Initializable
     @Override
     public void initialize(java.net.URL arg0, ResourceBundle arg1)
     {
+        objectsList =  FXCollections.observableArrayList();
         objectsLayout.prefHeightProperty().bind(objectsScrollAdd.heightProperty());
         objectsLayout.prefWidthProperty().bind(objectsScrollAdd.widthProperty());
 
@@ -158,12 +164,14 @@ public class MainLayoutController implements Initializable
         }
         worldSettings = new JsonHandler("src\\assets\\GameData.json");
         objectData = new JsonHandler("src\\assets\\objects.json");
-
+        BringObjects(objectData, objectsList);
         fullScreenBox.setOnAction(e ->{
             worldSettings.GetObject().put("fullscreen", fullScreenBox.isSelected());
             worldSettings.Write();
         });
 
+
+        objectsView.setItems(objectsList);
         objectsView.setCellFactory(param -> new ListCell<>() {
             @Override
             protected void updateItem(JSONObject item, boolean empty) {
@@ -208,6 +216,20 @@ public class MainLayoutController implements Initializable
 
     }
 
+    private void BringObjects(JsonHandler objectData, ObservableList<JSONObject> objectsList) {
+        JSONObject main = objectData.GetObject();
+        JSONArray movables = (JSONArray) main.get("Movables");
+        for (Object movable : movables) {
+            objectsList.add((JSONObject) movable);
+        }
+        JSONArray stationers = (JSONArray) main.get("Stationers");
+        for (Object stationery : stationers) {
+            objectsList.add((JSONObject) stationery);
+        }
+    }
+
+
+
     @FXML
     private void NewMovableObject(){
         JSONObject temp = new JSONObject();
@@ -221,7 +243,8 @@ public class MainLayoutController implements Initializable
         animation.put("default", "default");
         animations.add(animation);
         temp.put("animations", animations);
-        objectsView.getItems().add(temp);
+        ((JSONArray)objectData.GetObject().get("Movables")).add(temp);
+        objectsList.add(temp);
     }
 
     @FXML
@@ -235,18 +258,28 @@ public class MainLayoutController implements Initializable
         temp.put("path", "");
         JSONArray ani_start = new JSONArray();
         temp.put("ani_start",ani_start);
-        objectsView.getItems().add(temp);
+        ((JSONArray)objectData.GetObject().get("Stationers")).add(temp);
+        objectsList.add(temp);
     }
 
     public void HandleObjectClick(MouseEvent mouseEvent) {
         if(mouseEvent.getClickCount() == 2){
             JSONObject object = objectsView.getSelectionModel().getSelectedItem();
             if(object != null) {
-                    Stationery.display("nn", object);
-            }
+                switch (object.get("type").toString()) {
+                    case ("Stationery"):
+                     Stationery.display("nn", object);
+                     break;
+                    case ("Movable"):
+                        System.out.println("no");
+                        break;
+
+                }
+                objectsView.refresh();
+                objectData.Write();
             }
         }
-
+    }
 
 
     public void AcceptFiles(DragEvent event){

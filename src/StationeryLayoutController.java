@@ -34,6 +34,8 @@ public class StationeryLayoutController implements Initializable {
     @FXML
     private ScrollPane propertyScroll;
     @FXML
+    private SplitPane mainLayout;
+    @FXML
     private ImageView objectImage;
     @FXML
     private GridPane propertyGrid;
@@ -49,8 +51,8 @@ public class StationeryLayoutController implements Initializable {
             System.out.println(Picture.getName());
             browse.setText(Picture.getName());
             objectImage.setImage(new Image(Picture.toURI().toString()));
-            }
         }
+    }
 
     @Override
     public void initialize(java.net.URL arg0, ResourceBundle arg1)
@@ -62,23 +64,10 @@ public class StationeryLayoutController implements Initializable {
         propertyGrid.prefWidthProperty().bind(propertyScroll.widthProperty());
         nameField.textProperty().addListener((observable, oldValue, newValue) -> {
             stationeryObject.put("name", newValue);
-                });
+        });
         Main.NumberFilter(damageField);
-
-        nameField.textProperty().addListener((observable, oldValue, newValue) -> {
-            stationeryObject.put("name", newValue);
-        });
-        damageField.textProperty().addListener((observable, oldValue, newValue) -> {
-            stationeryObject.put("damage", newValue);
-        });
         Main.NumberFilter(PYField);
-        PYField.textProperty().addListener((observable, oldValue, newValue) -> {
-            stationeryObject.put("y", newValue);
-        });
         Main.NumberFilter(PXField);
-        PXField.textProperty().addListener((observable, oldValue, newValue) -> {
-            stationeryObject.put("x", newValue);
-        });
     }
     public void SetJson(JSONObject object){
         this.stationeryObject = object;
@@ -103,8 +92,8 @@ public class StationeryLayoutController implements Initializable {
     public void HandleDrop(DragEvent event){
         File dropFile = event.getDragboard().getFiles().get(0);
         File asset_directory = new File(Main.directory + "\\assets");
-            if(!Main.files.contains(dropFile)){
-                Main.CopyFile(dropFile, asset_directory);
+        if(!Main.files.contains(dropFile)){
+            Main.CopyFile(dropFile, asset_directory);
         }
         objectImage.setImage(new Image(dropFile.toURI().toString()));
     }

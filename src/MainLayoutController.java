@@ -54,6 +54,8 @@ public class MainLayoutController implements Initializable
     @FXML
     private  Button backGroundButton;
     @FXML
+    private Button deleteObject;
+    @FXML
     private CheckBox fullScreenBox;
     @FXML
     private ScrollPane importScroll;
@@ -245,6 +247,18 @@ public class MainLayoutController implements Initializable
         temp.put("animations", animations);
         ((JSONArray)objectData.GetObject().get("Movables")).add(temp);
         objectsList.add(temp);
+    }
+    @FXML
+    private void DeleteObject(){
+        JSONObject object = objectsView.getSelectionModel().getSelectedItem();
+        objectsList.remove(object);
+        JSONObject data = objectData.GetObject();
+        JSONArray movables = (JSONArray)data.get("Movables");
+        movables.remove(object);
+        JSONArray stationers = (JSONArray)data.get("Stationers");
+        stationers.remove(object);
+        stationers.remove(object);
+        objectData.Write();
     }
 
     @FXML

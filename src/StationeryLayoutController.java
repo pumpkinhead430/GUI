@@ -92,10 +92,12 @@ public class StationeryLayoutController implements Initializable {
     public void HandleDrop(DragEvent event){
         File dropFile = event.getDragboard().getFiles().get(0);
         File asset_directory = new File(Main.directory + "\\assets");
-        if(!Main.files.contains(dropFile)){
+        File copiedFile = new File(asset_directory + "\\" + dropFile.getName());
+        if(!Main.files.contains(copiedFile)){
             Main.CopyFile(dropFile, asset_directory);
         }
         objectImage.setImage(new Image(dropFile.toURI().toString()));
+        stationeryObject.put("path", copiedFile.getPath());
     }
 
 }

@@ -11,7 +11,6 @@ public class Stationery {
     public static void display(String title, JSONObject object){
         try {
             Stage window = new Stage();
-            //window.initModality(Modality.WINDOW_MODAL);
             window.setTitle(title);
             window.setMinHeight(300);
             window.setMinWidth(300);

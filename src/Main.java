@@ -122,20 +122,24 @@ public class Main extends Application
     }
 
     public static void ReSizePicture(double maxWidth, double maxHeight, ImageView image){
-        double ratio = image.getImage().getWidth()/image.getImage().getHeight();
-        image.setFitHeight(1);
-        image.setFitWidth(ratio);
-        double previousWidth = image.getFitWidth();
-        double previousHeight = image.getFitHeight();
-        while(maxWidth > image.getFitWidth() && maxHeight > image.getFitHeight()) {
-            previousWidth = image.getFitWidth();
-            previousHeight = image.getFitHeight();
-            image.setFitHeight(image.getFitHeight() + 1);
-            image.setFitWidth(image.getFitHeight() * ratio);
+        if (image != null) {
 
+
+            double ratio = image.getImage().getWidth() / image.getImage().getHeight();
+            image.setFitHeight(1);
+            image.setFitWidth(ratio);
+            double previousWidth = image.getFitWidth();
+            double previousHeight = image.getFitHeight();
+            while (maxWidth > image.getFitWidth() && maxHeight > image.getFitHeight()) {
+                previousWidth = image.getFitWidth();
+                previousHeight = image.getFitHeight();
+                image.setFitHeight(image.getFitHeight() + 1);
+                image.setFitWidth(image.getFitHeight() * ratio);
+
+            }
+            image.setFitWidth(previousWidth);
+            image.setFitHeight(previousHeight);
         }
-        image.setFitWidth(previousWidth);
-        image.setFitHeight(previousHeight);
     }
 
 

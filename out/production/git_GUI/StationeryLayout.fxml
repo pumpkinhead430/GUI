@@ -7,8 +7,12 @@
 
 <HBox fx:id="mainBox" alignment="TOP_RIGHT" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="StationeryLayoutController">
    <children>
-      <ImageView fx:id="objectImage" fitHeight="480.0" fitWidth="425.0" pickOnBounds="true" preserveRatio="true" />
-      <ScrollPane fx:id="propertyScroll" blendMode="SRC_ATOP" hbarPolicy="ALWAYS" prefHeight="480.0" prefWidth="255.0" vbarPolicy="ALWAYS">
+      <StackPane fx:id="imageCont">
+         <children>
+            <ImageView fx:id="objectImage" fitHeight="480.0" fitWidth="425.0" pickOnBounds="true" preserveRatio="true" />
+         </children>
+      </StackPane>
+      <ScrollPane fx:id="propertyScroll" blendMode="SRC_ATOP" hbarPolicy="ALWAYS" minHeight="480.0" minWidth="255.0" prefHeight="480.0" prefWidth="255.0" vbarPolicy="ALWAYS">
          <content>
             <VBox fx:id="propertyBox">
                <children>

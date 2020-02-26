@@ -172,6 +172,9 @@ public class MainLayoutController implements Initializable
             worldSettings.Write();
         });
 
+        backGroundButton.setOnDragOver(this::AcceptFiles);
+        backGroundButton.setOnDragDropped(this::HandleBackGround);
+
 
         objectsView.setItems(objectsList);
         objectsView.setCellFactory(param -> new ListCell<>() {
@@ -216,6 +219,15 @@ public class MainLayoutController implements Initializable
             worldSettings.Write();
         });
 
+    }
+    private void HandleBackGround(DragEvent event){
+        File dropFile = event.getDragboard().getFiles().get(0);
+        File check = new File( Main.directory + "assets\\" + dropFile.getName());
+        if(!check.exists())
+            Main.CopyFile(dropFile, new File(Main.directory + "assets"));
+        backGroundButton.setText(dropFile.getName());
+        worldSettings.GetObject().put("background", "assets\\" + dropFile.getName());
+        worldSettings.Write();
     }
 
     private void BringObjects(JsonHandler objectData, ObservableList<JSONObject> objectsList) {

@@ -34,7 +34,6 @@ public class Main extends Application
     @Override
     public void start(final Stage stage) throws Exception
     {
-        System.out.println(directory);
         FXMLLoader loader = new FXMLLoader(Main.class.getResource("MainLayout.fxml"));
         Parent root = loader.load();
         MainLayoutController controller = loader.getController();

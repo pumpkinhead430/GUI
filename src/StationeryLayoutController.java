@@ -34,8 +34,6 @@ public class StationeryLayoutController implements Initializable {
     @FXML
     private ScrollPane propertyScroll;
     @FXML
-    private SplitPane mainLayout;
-    @FXML
     private ImageView objectImage;
     @FXML
     private GridPane propertyGrid;
@@ -48,9 +46,7 @@ public class StationeryLayoutController implements Initializable {
             if(!Main.files.contains(Picture)) {
                 Main.CopyFile(Picture, new File(Main.directory + "\\assets"));
             }
-            System.out.println(Picture.getName());
-            browse.setText(Picture.getName());
-            objectImage.setImage(new Image(Picture.toURI().toString()));
+            SwitchPicture(Picture.getName());
         }
     }
 
@@ -88,16 +84,24 @@ public class StationeryLayoutController implements Initializable {
         else
             event.consume();
     }
+    public void SwitchPicture(String name){
+        File asset_directory = new File(Main.directory + "\\assets");
+        File picture = new File(asset_directory + "\\" + name);
+        if(picture.exists()) {
+            objectImage.setImage(new Image(picture.toURI().toString()));
+            browse.setText(picture.getName());
+            stationeryObject.put("path", "assets\\" + picture.getName());
+        }
+    }
 
     public void HandleDrop(DragEvent event){
         File dropFile = event.getDragboard().getFiles().get(0);
         File asset_directory = new File(Main.directory + "\\assets");
-        File copiedFile = new File(asset_directory + "\\" + dropFile.getName());
+        File copiedFile = new File(asset_directory.getPath() + "\\" + dropFile.getName());
         if(!Main.files.contains(copiedFile)){
             Main.CopyFile(dropFile, asset_directory);
         }
-        objectImage.setImage(new Image(dropFile.toURI().toString()));
-        stationeryObject.put("path", copiedFile.getPath());
+        SwitchPicture(copiedFile.getName());
     }
 
 }

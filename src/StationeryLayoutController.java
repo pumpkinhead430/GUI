@@ -12,6 +12,7 @@ import javafx.scene.input.DragEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import netscape.javascript.JSObject;
 import org.json.simple.JSONObject;
@@ -39,6 +40,8 @@ public class StationeryLayoutController implements Initializable {
     @FXML
     private HBox mainBox;
     @FXML
+    private StackPane imageCont;
+    @FXML
     private ImageView objectImage;
     @FXML
     private GridPane propertyGrid;
@@ -59,6 +62,8 @@ public class StationeryLayoutController implements Initializable {
     public void initialize(java.net.URL arg0, ResourceBundle arg1)
     {
         propertyScroll.prefHeightProperty().bind(mainBox.heightProperty());
+        imageCont.prefHeightProperty().bind(mainBox.heightProperty());
+        imageCont.prefWidthProperty().bind(mainBox.widthProperty());
         objectImage.pickOnBoundsProperty();
         objectImage.setOnDragOver(this::AcceptFiles);
         objectImage.setOnDragDropped(this::HandleDrop);

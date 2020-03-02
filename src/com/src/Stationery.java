@@ -24,6 +24,7 @@ public class Stationery {
             window.setScene(scene);
             window.setAlwaysOnTop(true);
             window.showAndWait();
+            controller.WriteInfo();
         }
         catch (IOException e){
             e.printStackTrace();

@@ -1,12 +1,9 @@
 package com.src;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.SplitPane;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
@@ -15,11 +12,10 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import netscape.javascript.JSObject;
 import org.json.simple.JSONObject;
 
 import java.io.File;
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -47,6 +43,9 @@ public class StationeryLayoutController implements Initializable {
     @FXML
     private GridPane propertyGrid;
     @FXML
+    private ListView<TextField> starterView;
+    private ObservableList<TextField> aniStarters;
+    @FXML
     private Button browse;
     @FXML
     private void handlePictureButton() {
@@ -62,6 +61,8 @@ public class StationeryLayoutController implements Initializable {
     @Override
     public void initialize(java.net.URL arg0, ResourceBundle arg1)
     {
+        aniStarters = FXCollections.observableArrayList();
+        starterView.setItems(aniStarters);
         propertyScroll.prefHeightProperty().bind(mainBox.heightProperty());
         imageCont.prefHeightProperty().bind(mainBox.heightProperty());
         imageCont.prefWidthProperty().bind(mainBox.widthProperty());
@@ -69,9 +70,6 @@ public class StationeryLayoutController implements Initializable {
         objectImage.setOnDragOver(this::AcceptFiles);
         objectImage.setOnDragDropped(this::HandleDrop);
         propertyGrid.prefWidthProperty().bind(propertyBox.widthProperty());
-        nameField.textProperty().addListener((observable, oldValue, newValue) -> {
-            stationeryObject.put("name", newValue);
-        });
         Main.NumberFilter(damageField);
         Main.NumberFilter(PYField);
         Main.NumberFilter(PXField);
@@ -80,6 +78,17 @@ public class StationeryLayoutController implements Initializable {
         this.stationeryObject = object;
     }
 
+
+    public void WriteInfo(){
+        ArrayList<String> text = new ArrayList<>();
+        for(TextField field : aniStarters)
+            text.add(field.getText());
+        stationeryObject.put("ani_start", text);
+        stationeryObject.put("name", nameField.getText());
+        stationeryObject.put("x",PXField.getText());
+        stationeryObject.put("y", PYField.getText());
+        stationeryObject.put("damage", damageField.getText());
+    }
     public void AcceptFiles(DragEvent event){
         if (event.getDragboard().hasFiles()) {
             List<File> draggedFiles = event.getDragboard().getFiles();
@@ -95,6 +104,7 @@ public class StationeryLayoutController implements Initializable {
         else
             event.consume();
     }
+
     public void SwitchPicture(String name){
         File asset_directory = new File(Main.directory + "\\assets");
         File picture = new File(asset_directory + "\\" + name);
@@ -103,6 +113,11 @@ public class StationeryLayoutController implements Initializable {
             browse.setText(picture.getName());
             stationeryObject.put("path", "assets\\" + picture.getName());
         }
+    }
+
+    @FXML
+    public void AddStarter(){
+        aniStarters.add(new TextField("temp(ani starter)"));
     }
 
     public void HandleDrop(DragEvent event){

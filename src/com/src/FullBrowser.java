@@ -1,14 +1,11 @@
+package com.src;
+
 import javafx.fxml.FXMLLoader;
 import javafx.stage.*;
 import javafx.scene.*;
-import javafx.scene.layout.*;
-import javafx.scene.control.*;
-import javafx.geometry.*;
-import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 
 public class FullBrowser {
 
@@ -19,7 +16,7 @@ public class FullBrowser {
             window.setTitle(title);
             window.setMinHeight(300);
             window.setMinWidth(300);
-            FXMLLoader loader = new FXMLLoader(FullBrowser.class.getResource("Browser.fxml"));
+            FXMLLoader loader = new FXMLLoader(FullBrowser.class.getResource("com/src/Browser.fxml"));
             Parent root = loader.load();
             BrowserController browserController = loader.getController();
             Scene scene = new Scene(root);

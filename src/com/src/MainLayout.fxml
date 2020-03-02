@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane id="Border" fx:id="mainLayout" prefHeight="720" prefWidth="1280" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainLayoutController">
+<BorderPane id="Border" fx:id="mainLayout" prefHeight="720" prefWidth="1280" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.src.MainLayoutController">
     <top>
         <MenuBar fx:id="menuBar" onKeyPressed="#handleKeyInput">
             <Menu text="File">

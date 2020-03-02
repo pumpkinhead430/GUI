@@ -1,3 +1,5 @@
+package com.src;
+
 import javafx.stage.*;
 import javafx.scene.*;
 import javafx.scene.layout.*;

@@ -12,6 +12,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.io.File;
@@ -74,13 +75,25 @@ public class StationeryLayoutController implements Initializable {
         Main.NumberFilter(PYField);
         Main.NumberFilter(PXField);
     }
+
+    public void LoadJSON(){
+        nameField.setText(stationeryObject.get("name").toString());
+        damageField.setText(stationeryObject.get("damage").toString());
+        PYField.setText(stationeryObject.get("y").toString());
+        PXField.setText(stationeryObject.get("x").toString());
+        for(Object o : ((JSONArray)stationeryObject.get("ani_start"))){
+            aniStarters.add(new TextField(o.toString()));
+        }
+        File picture = new File(stationeryObject.get("path").toString());
+        SwitchPicture(picture.getName());
+    }
     public void SetJson(JSONObject object){
         this.stationeryObject = object;
     }
 
 
     public void WriteInfo(){
-        ArrayList<String> text = new ArrayList<>();
+        JSONArray text = new JSONArray();
         for(TextField field : aniStarters)
             text.add(field.getText());
         stationeryObject.put("ani_start", text);
@@ -119,6 +132,8 @@ public class StationeryLayoutController implements Initializable {
     public void AddStarter(){
         aniStarters.add(new TextField("temp(ani starter)"));
     }
+    @FXML
+    public void DeleteStarter(){ aniStarters.remove(starterView.getSelectionModel().getSelectedItem()); }
 
     public void HandleDrop(DragEvent event){
         File dropFile = event.getDragboard().getFiles().get(0);

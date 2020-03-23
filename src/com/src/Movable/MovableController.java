@@ -9,6 +9,7 @@ import javafx.scene.layout.VBox;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import java.io.IOException;
 import java.util.ResourceBundle;
 
 public class MovableController implements Initializable {
@@ -30,17 +31,24 @@ public class MovableController implements Initializable {
     private HBox mainBox;
     @FXML
     private GridPane propertyGrid;
+    @FXML
+    private TabPane animationPane;
 
     @Override
     public void initialize(java.net.URL arg0, ResourceBundle arg1)
     {
-        //propertyScroll.prefHeightProperty().bind(mainBox.heightProperty());
-        //prefWidthProperty().bind(propertyBox.widthProperty());
         Main.NumberFilter(damageField);
         Main.NumberFilter(PYField);
         Main.NumberFilter(PXField);
     }
-
+    @FXML
+    public void CreateAnimation()  {
+        try {
+            animationPane.getTabs().add(animationTab.newAnimation());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     public void LoadJSON(){
         System.out.println("nice");
     }

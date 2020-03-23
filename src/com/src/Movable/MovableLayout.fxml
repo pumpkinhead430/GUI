@@ -41,6 +41,7 @@
                               <Insets left="20.0" />
                            </padding>
                         </GridPane>
+                        <Button mnemonicParsing="false" onAction="#CreateAnimation" text="New Animation" />
                      </children>
                   </VBox>
                </content>

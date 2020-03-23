@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.media.*?>
+
+<BorderPane prefHeight="553.0" prefWidth="684.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.src.Movable.MovableController">
+   <right>
+      <HBox fx:id="mainBox" alignment="TOP_RIGHT" prefHeight="493.0" prefWidth="219.0" BorderPane.alignment="CENTER">
+         <children>
+            <ScrollPane prefHeight="523.0" prefWidth="205.0">
+               <content>
+                  <VBox fx:id="propertyBox">
+                     <children>
+                        <GridPane fx:id="propertyGrid" prefHeight="251.0" prefWidth="203.0">
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="94.0" minWidth="10.0" prefWidth="70.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="132.0" minWidth="10.0" prefWidth="113.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <children>
+                              <TextField fx:id="damageField" prefHeight="25.0" prefWidth="79.0" promptText="damage..." GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <TextField fx:id="nameField" promptText="name..." GridPane.columnIndex="1" />
+                              <Label text="Name:" />
+                              <Label prefHeight="17.0" prefWidth="74.0" text="Damage:" GridPane.rowIndex="1" />
+                              <Label text="Health" GridPane.rowIndex="2" />
+                              <Label text="Position X:" GridPane.rowIndex="3" />
+                              <Label text="Position Y:" GridPane.rowIndex="4" />
+                              <TextField fx:id="PYField" promptText="Position..." GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                              <TextField fx:id="PXField" prefWidth="110.0" promptText="Position..." GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                              <TextField fx:id="healthField" promptText="Health..." GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                           </children>
+                           <padding>
+                              <Insets left="20.0" />
+                           </padding>
+                        </GridPane>
+                     </children>
+                  </VBox>
+               </content>
+            </ScrollPane>
+         </children>
+      </HBox>
+   </right>
+   <bottom>
+      <TabPane fx:id="animationPane" prefHeight="223.0" prefWidth="684.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER" />
+   </bottom>
+   <center>
+      <Pane prefHeight="330.0" prefWidth="465.0" BorderPane.alignment="CENTER">
+         <children>
+            <MediaView fitHeight="300.0" fitWidth="400.0" />
+         </children>
+      </Pane>
+   </center>
+</BorderPane>

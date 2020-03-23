@@ -1,27 +1,24 @@
-package com.src;
+package com.src.Movable;
+
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
 
-public class Stationery {
+public class Movable {
     public static void display(String title, JSONObject object){
         try {
             Stage window = new Stage();
             window.setTitle(title);
             window.setMinHeight(300);
             window.setMinWidth(300);
-            FXMLLoader loader = new FXMLLoader(Stationery.class.getResource("StationeryLayout.fxml"));
+            FXMLLoader loader = new FXMLLoader(Movable.class.getResource("MovableLayout.fxml"));
             Parent root = loader.load();
-            StationeryLayoutController controller = loader.getController();
+            MovableController controller = loader.getController();
             controller.SetJson(object);
-            //System.out.println(object);
-            //System.out.println(object.get("ani_start"));
             controller.LoadJSON();
             Scene scene = new Scene(root);
             scene.getStylesheets().add("Viper.css");

@@ -1,43 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<Tab text="Untitled Tab" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
+<Tab text="Untitled Tab" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.src.Movable.AnimationController">
    <content>
-      <FlowPane prefHeight="200.0" prefWidth="200.0">
-         <children>
-            <HBox minHeight="100.0" minWidth="200.0" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+      <ScrollPane fx:id="mainScroll">
+         <content>
+            <TilePane fx:id="mainTile" hgap="20.0" prefHeight="200.0" prefWidth="200.0">
                <children>
-                  <Label fx:id="name" text="Name:" />
-                  <TextField fx:id="namefield" promptText="Name..." />
+                  <HBox minHeight="100.0" minWidth="200.0" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                     <children>
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Name:" />
+                        <TextField fx:id="nameField" promptText="Name..." />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                     <children>
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Force to Y:" />
+                        <TextField fx:id="YForceField" promptText="Force..." />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                     <children>
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Force to X:" />
+                        <TextField fx:id="XForceField" promptText="Force..." />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                     <children>
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Damage:" />
+                        <TextField fx:id="damageField" promptText="damage..." />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                     <children>
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Trigger:" />
+                        <TextField fx:id="triggerField" promptText="Trigger..." />
+                     </children>
+                  </HBox>
+                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Frames" />
+                        <ListView prefHeight="200.0" prefWidth="200.0" />
+                        <ToolBar prefHeight="40.0" prefWidth="200.0">
+                          <items>
+                            <Button mnemonicParsing="false" text="Button" />
+                          </items>
+                        </ToolBar>
+                     </children>
+                  </VBox>
+                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Ani Starters" />
+                        <ListView prefHeight="200.0" prefWidth="200.0" />
+                        <ToolBar prefHeight="40.0" prefWidth="200.0">
+                          <items>
+                            <Button mnemonicParsing="false" text="Button" />
+                          </items>
+                        </ToolBar>
+                     </children>
+                  </VBox>
                </children>
-            </HBox>
-            <HBox layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
-               <children>
-                  <Label fx:id="Yforce" text="Y force:" />
-                  <TextField fx:id="Yforcefield" promptText="Force..." />
-               </children>
-            </HBox>
-            <HBox layoutX="20.0" layoutY="20.0" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
-               <children>
-                  <Label fx:id="Xforce" text="X force:" />
-                  <TextField fx:id="Xforcefield" promptText="Force..." />
-               </children>
-            </HBox>
-            <HBox layoutX="30.0" layoutY="30.0" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
-               <children>
-                  <Label fx:id="damage" text="Damage:" />
-                  <TextField fx:id="damageField" promptText="damage..." />
-               </children>
-            </HBox>
-            <HBox layoutX="40.0" layoutY="40.0" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
-               <children>
-                  <Label fx:id="trigger" text="Trigger:" />
-                  <TextField fx:id="triggerField" promptText="Trigger..." />
-               </children>
-            </HBox>
-         </children>
-      </FlowPane>
+            </TilePane>
+         </content>
+         <padding>
+            <Insets top="20.0" />
+         </padding>
+      </ScrollPane>
    </content>
 </Tab>

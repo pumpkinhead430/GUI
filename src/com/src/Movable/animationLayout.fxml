@@ -23,6 +23,12 @@
                         <TextField fx:id="YForceField" promptText="Force..." />
                      </children>
                   </HBox>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Animation TIme:" />
+                        <TextField fx:id="timeField" promptText="milliseconds..." />
+                     </children>
+                  </HBox>
                   <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                      <children>
                         <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Force to X:" />
@@ -44,10 +50,14 @@
                   <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                      <children>
                         <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Frames" />
-                        <ListView prefHeight="200.0" prefWidth="200.0" />
+                        <ListView fx:id="frameList" prefHeight="200.0" prefWidth="200.0" />
                         <ToolBar prefHeight="40.0" prefWidth="200.0">
                           <items>
-                            <Button mnemonicParsing="false" text="Button" />
+                            <Button mnemonicParsing="false" onAction="#AddFrame" text="Add" />
+                              <Button mnemonicParsing="false" onAction="#DeleteFrame" text="Delete">
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets></Button>
                           </items>
                         </ToolBar>
                      </children>
@@ -55,10 +65,15 @@
                   <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                      <children>
                         <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Ani Starters" />
-                        <ListView prefHeight="200.0" prefWidth="200.0" />
+                        <ListView fx:id="aniStartList" prefHeight="200.0" prefWidth="200.0" />
                         <ToolBar prefHeight="40.0" prefWidth="200.0">
                           <items>
-                            <Button mnemonicParsing="false" text="Button" />
+                            <Button mnemonicParsing="false" onAction="#AddAniStarter" text="Add" />
+                              <Button mnemonicParsing="false" onAction="#DeleteAni_Starter" text="Delete">
+                                 <opaqueInsets>
+                                    <Insets left="20.0" />
+                                 </opaqueInsets>
+                              </Button>
                           </items>
                         </ToolBar>
                      </children>

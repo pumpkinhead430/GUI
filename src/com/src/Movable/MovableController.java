@@ -50,8 +50,15 @@ public class MovableController implements Initializable {
         animationPane.getTabs().add(animation.tab);
     }
     public void LoadJSON(){
-        //TODO need to put data of movable object in panes
-        System.out.println("nice");
+        nameField.setText(movableObject.get("name").toString());
+        healthField.setText(movableObject.get("health").toString());
+        PYField.setText(movableObject.get("x").toString());
+        PXField.setText(movableObject.get("y").toString());
+        for(Object o : ((JSONArray)movableObject.get("animations"))){
+            animationTab animation = new animationTab( (JSONObject) o);
+            animations.add(animation);
+            animationPane.getTabs().add(animation.tab);
+        }
     }
     public void SetJson(JSONObject object){
         movableObject = object;

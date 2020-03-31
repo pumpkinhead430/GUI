@@ -4,6 +4,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
@@ -23,9 +24,11 @@ public class Movable {
             Scene scene = new Scene(root);
             scene.getStylesheets().add("Viper.css");
             window.setScene(scene);
+            window.setOnCloseRequest((WindowEvent e) -> controller.WriteInfo());
             window.setAlwaysOnTop(true);
             window.showAndWait();
-            controller.WriteInfo();
+
+
         }
         catch (IOException e){
             e.printStackTrace();

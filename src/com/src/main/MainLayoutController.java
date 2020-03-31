@@ -266,7 +266,6 @@ public class MainLayoutController implements Initializable
         movables.remove(object);
         JSONArray stationers = (JSONArray)data.get("Stationers");
         stationers.remove(object);
-        stationers.remove(object);
         objectData.Write();
     }
 

@@ -14,15 +14,28 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.EventListener;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+import java.util.function.UnaryOperator;
 
 
 public class Main extends Application
 {
     public static final String[] pictureFormat = {"jpg", "png", "bmp", "jpeg"};
     public static final String directory = Paths.get("src").toAbsolutePath().toString();
+    public static final File assets = new File(Paths.get("src//assets").toAbsolutePath().toString());
     public static ArrayList<File> files = new ArrayList<>();
+    private  static UnaryOperator<TextFormatter.Change> filter = change -> {
+        String text = change.getText();
+
+        if (text.matches("-*[0-9]*")) {
+            return change;
+        }
+
+        return null;
+    };
+    public static TextFormatter<String> allNumberFilter = new TextFormatter<>(filter);
 
     public static void main(String[] arguments)
     {
@@ -79,17 +92,13 @@ public class Main extends Application
     public static void NumberFilter(TextField field) {
         field.getProperties().put("vkType", "numeric");
         field.setTextFormatter(new TextFormatter<>(c -> {
-            if (c.isContentChange()) {
-                if (c.getControlNewText().length() == 0) {
+            if (c.isContentChange()){
+                if(c.getControlNewText().matches("-*[0-9]*")){
+                    System.out.println("hi");
                     return c;
                 }
-                try {
-                    Integer.parseInt(c.getControlNewText());
-                    return c;
-                } catch (NumberFormatException ignored) {
-                }
-                return null;
 
+                return null;
             }
             return c;
         }));
@@ -139,6 +148,14 @@ public class Main extends Application
             image.setFitWidth(previousWidth);
             image.setFitHeight(previousHeight);
         }
+    }
+    public static boolean ExsitsInAssets(String name){
+        for (File file : files) {
+            if (file.getName().equals(name)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 

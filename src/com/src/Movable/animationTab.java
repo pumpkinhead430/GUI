@@ -19,9 +19,9 @@ public class animationTab {
     public AnimationController controller;
     public Tab tab;
     public animationTab(JSONObject object){
-        FXMLLoader loader = new FXMLLoader();
+        FXMLLoader loader = new FXMLLoader(animationTab.class.getResource("animationLayout.fxml"));
         try {
-            tab = FXMLLoader.load(animationTab.class.getResource("animationLayout.fxml"));
+            tab = loader.load();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -30,9 +30,9 @@ public class animationTab {
     }
 
     public animationTab(){
-        FXMLLoader loader = new FXMLLoader();
+        FXMLLoader loader = new FXMLLoader(animationTab.class.getResource("animationLayout.fxml"));
         try {
-            tab = FXMLLoader.load(animationTab.class.getResource("animationLayout.fxml"));
+            tab = loader.load();
         } catch (IOException e) {
             e.printStackTrace();
         }

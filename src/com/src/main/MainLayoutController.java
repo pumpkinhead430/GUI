@@ -1,10 +1,12 @@
-package com.src;
+package com.src.main;
 
 import java.io.*;
 import java.util.*;
 
-import com.src.FullBrowser;
-import com.src.JsonHandler;
+import com.src.*;
+import com.src.Browser.FullBrowser;
+import com.src.Movable.Movable;
+import com.src.Stationery.Stationery;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -264,7 +266,6 @@ public class MainLayoutController implements Initializable
         movables.remove(object);
         JSONArray stationers = (JSONArray)data.get("Stationers");
         stationers.remove(object);
-        stationers.remove(object);
         objectData.Write();
     }
 
@@ -289,12 +290,11 @@ public class MainLayoutController implements Initializable
             if(object != null) {
                 switch (object.get("type").toString()) {
                     case ("Stationery"):
-                     Stationery.display("nn", object);
+                     Stationery.display("Stationery Edit", object);
                      break;
                     case ("Movable"):
-                        System.out.println("no");
+                        Movable.display("Movable Edit", object);
                         break;
-
                 }
                 objectsView.refresh();
                 objectData.Write();

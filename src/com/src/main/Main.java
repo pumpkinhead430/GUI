@@ -1,14 +1,13 @@
-package com.src;
+package com.src.main;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.apache.commons.io.FileUtils;
 
@@ -24,8 +23,8 @@ public class Main extends Application
 {
     public static final String[] pictureFormat = {"jpg", "png", "bmp", "jpeg"};
     public static final String directory = Paths.get("src").toAbsolutePath().toString();
+    public static final File assets = new File(Paths.get("src//assets").toAbsolutePath().toString());
     public static ArrayList<File> files = new ArrayList<>();
-
     public static void main(String[] arguments)
     {
         Application.launch(Main.class, arguments);
@@ -81,17 +80,12 @@ public class Main extends Application
     public static void NumberFilter(TextField field) {
         field.getProperties().put("vkType", "numeric");
         field.setTextFormatter(new TextFormatter<>(c -> {
-            if (c.isContentChange()) {
-                if (c.getControlNewText().length() == 0) {
+            if (c.isContentChange()){
+                if(c.getControlNewText().matches("[0-9]*")){
                     return c;
                 }
-                try {
-                    Integer.parseInt(c.getControlNewText());
-                    return c;
-                } catch (NumberFormatException ignored) {
-                }
-                return null;
 
+                return null;
             }
             return c;
         }));
@@ -141,6 +135,14 @@ public class Main extends Application
             image.setFitWidth(previousWidth);
             image.setFitHeight(previousHeight);
         }
+    }
+    public static boolean ExsitsInAssets(String name){
+        for (File file : files) {
+            if (file.getName().equals(name)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 

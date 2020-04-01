@@ -1,10 +1,8 @@
-package com.src;
+package com.src.Stationery;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
@@ -20,8 +18,6 @@ public class Stationery {
             Parent root = loader.load();
             StationeryLayoutController controller = loader.getController();
             controller.SetJson(object);
-            //System.out.println(object);
-            //System.out.println(object.get("ani_start"));
             controller.LoadJSON();
             Scene scene = new Scene(root);
             scene.getStylesheets().add("Viper.css");

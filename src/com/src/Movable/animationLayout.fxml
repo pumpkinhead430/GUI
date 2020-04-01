@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<Tab fx:id="mainTab" text="Untitled Tab" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.src.Movable.AnimationController">
+   <content>
+      <ScrollPane fx:id="mainScroll">
+         <content>
+            <TilePane fx:id="mainTile" hgap="20.0" prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <HBox minHeight="100.0" minWidth="200.0" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                     <children>
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Name:" />
+                        <TextField fx:id="nameField" promptText="Name..." />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                     <children>
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Force to Y:" />
+                        <TextField fx:id="YForceField" promptText="Force..." />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                     <children>
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Animation TIme:" />
+                        <TextField fx:id="timeField" promptText="milliseconds..." />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                     <children>
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Force to X:" />
+                        <TextField fx:id="XForceField" promptText="Force..." />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                     <children>
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Damage:" />
+                        <TextField fx:id="damageField" promptText="damage..." />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                     <children>
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Trigger:" />
+                        <TextField fx:id="triggerField" promptText="Trigger..." />
+                     </children>
+                  </HBox>
+                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Frames" />
+                        <ListView fx:id="frameList" onDragDropped="#HandleDrop" onDragOver="#AcceptFiles" prefHeight="200.0" prefWidth="200.0" />
+                        <ToolBar prefHeight="40.0" prefWidth="200.0">
+                          <items>
+                            <Button mnemonicParsing="false" onAction="#AddFrame" text="Add" />
+                              <Button mnemonicParsing="false" onAction="#DeleteFrame" text="Delete">
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets></Button>
+                          </items>
+                        </ToolBar>
+                     </children>
+                  </VBox>
+                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Ani Starters" />
+                        <ListView fx:id="aniStartList" prefHeight="200.0" prefWidth="200.0" />
+                        <ToolBar prefHeight="40.0" prefWidth="200.0">
+                          <items>
+                            <Button mnemonicParsing="false" onAction="#AddAniStarter" text="Add" />
+                              <Button mnemonicParsing="false" onAction="#DeleteAni_Starter" text="Delete">
+                                 <opaqueInsets>
+                                    <Insets left="20.0" />
+                                 </opaqueInsets>
+                              </Button>
+                          </items>
+                        </ToolBar>
+                     </children>
+                  </VBox>
+               </children>
+            </TilePane>
+         </content>
+         <padding>
+            <Insets top="20.0" />
+         </padding>
+      </ScrollPane>
+   </content>
+</Tab>

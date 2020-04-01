@@ -40,6 +40,7 @@ public class MovableController implements Initializable {
     public void initialize(java.net.URL arg0, ResourceBundle arg1)
     {
         animations = new ArrayList<>();
+        Main.NumberFilter(healthField);
         Main.NumberFilter(PYField);
         Main.NumberFilter(PXField);
     }
@@ -72,6 +73,13 @@ public class MovableController implements Initializable {
             }
         }
         return null;
+    }
+    @FXML
+    public void DeleteAnimation(){
+        Tab tab = animationPane.getSelectionModel().getSelectedItem();
+        animationTab animation = FindController(tab);
+        animations.remove(animation);
+        animationPane.getTabs().remove(tab);
     }
 
     public void WriteInfo(){

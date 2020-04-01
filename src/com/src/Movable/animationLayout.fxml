@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<Tab text="Untitled Tab" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.src.Movable.AnimationController">
+<Tab fx:id="mainTab" text="Untitled Tab" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.src.Movable.AnimationController">
    <content>
       <ScrollPane fx:id="mainScroll">
          <content>
@@ -23,7 +23,7 @@
                         <TextField fx:id="YForceField" promptText="Force..." />
                      </children>
                   </HBox>
-                  <HBox prefHeight="100.0" prefWidth="200.0">
+                  <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                      <children>
                         <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Animation TIme:" />
                         <TextField fx:id="timeField" promptText="milliseconds..." />
@@ -50,7 +50,7 @@
                   <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                      <children>
                         <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Frames" />
-                        <ListView fx:id="frameList" prefHeight="200.0" prefWidth="200.0" />
+                        <ListView fx:id="frameList" onDragDropped="#HandleDrop" onDragOver="#AcceptFiles" prefHeight="200.0" prefWidth="200.0" />
                         <ToolBar prefHeight="40.0" prefWidth="200.0">
                           <items>
                             <Button mnemonicParsing="false" onAction="#AddFrame" text="Add" />

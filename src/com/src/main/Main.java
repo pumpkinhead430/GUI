@@ -1,6 +1,7 @@
 package com.src.main;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -14,10 +15,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.EventListener;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
-import java.util.function.UnaryOperator;
 
 
 public class Main extends Application
@@ -26,17 +25,6 @@ public class Main extends Application
     public static final String directory = Paths.get("src").toAbsolutePath().toString();
     public static final File assets = new File(Paths.get("src//assets").toAbsolutePath().toString());
     public static ArrayList<File> files = new ArrayList<>();
-    private  static UnaryOperator<TextFormatter.Change> filter = change -> {
-        String text = change.getText();
-
-        if (text.matches("-*[0-9]*")) {
-            return change;
-        }
-
-        return null;
-    };
-    public static TextFormatter<String> allNumberFilter = new TextFormatter<>(filter);
-
     public static void main(String[] arguments)
     {
         Application.launch(Main.class, arguments);
@@ -93,8 +81,7 @@ public class Main extends Application
         field.getProperties().put("vkType", "numeric");
         field.setTextFormatter(new TextFormatter<>(c -> {
             if (c.isContentChange()){
-                if(c.getControlNewText().matches("-*[0-9]*")){
-                    System.out.println("hi");
+                if(c.getControlNewText().matches("[0-9]*")){
                     return c;
                 }
 

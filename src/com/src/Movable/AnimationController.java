@@ -11,7 +11,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TextField;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.TilePane;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -21,6 +24,8 @@ import java.util.*;
 
 
 public class AnimationController implements Initializable {
+    @FXML
+    private Tab mainTab;
     @FXML
     private ListView<String> frameList;
     @FXML
@@ -49,10 +54,30 @@ public class AnimationController implements Initializable {
         frameList.setItems(frameObsList);
         aniStartObsList = FXCollections.observableArrayList();
         aniStartList.setItems(aniStartObsList);
-        damageField.setTextFormatter(Main.allNumberFilter);
-        YForceField.setTextFormatter(Main.allNumberFilter);
-        XForceField.setTextFormatter(Main.allNumberFilter);
+        damageField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if(!newValue.matches("-*[0-9]*")){
+                damageField.setText(oldValue);
+            }
+        });
+        YForceField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if(!newValue.matches("-*[0-9]*")){
+                YForceField.setText(oldValue);
+            }
+        });
+        XForceField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if(!newValue.matches("-*[0-9]*")){
+                XForceField.setText(oldValue);
+            }
+        });
+        triggerField.textProperty().addListener((observable, oldValue, newValue) -> {
+            triggerField.setText(newValue.substring(newValue.length() -1));
+        });
+        nameField.textProperty().addListener((observable, oldValue, newValue) -> {
+            mainTab.setText(newValue);
+        });
         Main.NumberFilter(timeField);
+
+
         mainTile.prefHeightProperty().bind(mainScroll.heightProperty());
         mainTile.prefWidthProperty().bind(mainScroll.widthProperty());
 
@@ -89,6 +114,7 @@ public class AnimationController implements Initializable {
         YForceField.setText(object.get("forcex").toString());
         damageField.setText(object.get("damage").toString());
         triggerField.setText(object.get("trigger").toString());
+        timeField.setText(object.get("time").toString());
 
         for(Object o : ((JSONArray)object.get("ani_starter"))){
             aniStartObsList.add(new TextField(o.toString()));
@@ -121,6 +147,32 @@ public class AnimationController implements Initializable {
     public void DeleteAni_Starter(){
         TextField starter = aniStartList.getSelectionModel().getSelectedItem();
         aniStartObsList.remove(starter);
+    }
+
+    public void AcceptFiles(DragEvent event){
+        if (event.getDragboard().hasFiles()) {
+            List<File> draggedFiles = event.getDragboard().getFiles();
+            for(File file : draggedFiles){
+                if(!Main.IsPicture(file.getName())){
+                    event.consume();
+                    break;
+                }
+            }
+            if(!event.isConsumed())
+                event.acceptTransferModes(TransferMode.COPY);
+        }
+        else
+            event.consume();
+    }
+
+    public void HandleDrop(DragEvent event){
+        List<File> dropFiles = event.getDragboard().getFiles();
+        for(File file : dropFiles){
+            if(!Main.ExsitsInAssets(file.getName())){
+                Main.CopyFile(file, Main.assets);
+            }
+            frameObsList.add(file.getName());
+        }
     }
 
 }

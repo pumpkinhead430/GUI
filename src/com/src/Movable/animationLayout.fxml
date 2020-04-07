@@ -58,11 +58,13 @@
                                  <opaqueInsets>
                                     <Insets />
                                  </opaqueInsets></Button>
+                              <Button fx:id="swapUp" mnemonicParsing="false" onAction="#SwapUp" text="Up" />
+                              <Button fx:id="swapDown" mnemonicParsing="false" onAction="#SwapDown" text="Down" />
                           </items>
                         </ToolBar>
                      </children>
                   </VBox>
-                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                  <VBox>
                      <children>
                         <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Ani Starters" />
                         <ListView fx:id="aniStartList" prefHeight="200.0" prefWidth="200.0" />

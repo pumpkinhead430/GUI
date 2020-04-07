@@ -7,7 +7,7 @@
 
 <BorderPane prefHeight="553.0" prefWidth="684.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.src.Movable.MovableController">
    <right>
-      <ScrollPane prefHeight="330.0" prefWidth="257.0">
+      <ScrollPane minHeight="330.0" minWidth="257.0" prefHeight="330.0" prefWidth="257.0">
          <content>
             <VBox fx:id="propertyBox">
                <children>
@@ -48,7 +48,7 @@
       </ScrollPane>
    </right>
    <bottom>
-      <TabPane fx:id="animationPane" prefHeight="223.0" prefWidth="684.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER" />
+      <TabPane fx:id="animationPane" prefHeight="519.0" prefWidth="684.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER" />
    </bottom>
    <center>
       <Pane prefHeight="330.0" prefWidth="465.0" BorderPane.alignment="CENTER">

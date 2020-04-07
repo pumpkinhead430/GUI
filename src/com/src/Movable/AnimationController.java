@@ -9,10 +9,9 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ListView;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.TilePane;
@@ -40,6 +39,10 @@ public class AnimationController implements Initializable {
     private TextField YForceField;
     @FXML
     private TextField XForceField;
+    @FXML
+    private Button swapUp;
+    @FXML
+    private Button swapDown;
     @FXML
     private TextField triggerField;
     @FXML
@@ -173,6 +176,20 @@ public class AnimationController implements Initializable {
             }
             frameObsList.add(file.getName());
         }
+    }
+
+    @FXML
+    public void SwapUp(){
+        String frame =frameList.getSelectionModel().getSelectedItem();
+        if(frameObsList.indexOf(frame) - 1 >= 0)
+            Collections.swap(frameObsList, frameObsList.indexOf(frame), frameObsList.indexOf(frame) - 1);
+    }
+
+    @FXML
+    public void SwapDown(){
+        String frame =frameList.getSelectionModel().getSelectedItem();
+        if(frameObsList.indexOf(frame) + 1 < frameObsList.size())
+            Collections.swap(frameObsList, frameObsList.indexOf(frame), frameObsList.indexOf(frame) + 1);
     }
 
 }

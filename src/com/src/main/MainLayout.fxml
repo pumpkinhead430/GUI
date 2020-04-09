@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.*?>
+<?import javafx.scene.canvas.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.effect.*?>
 <?import javafx.scene.layout.*?>
@@ -137,4 +138,7 @@
             </content>
         </ScrollPane>
     </right>
+   <center>
+      <Canvas fx:id="mainCanvas" height="440.0" width="730.0" BorderPane.alignment="CENTER" />
+   </center>
 </BorderPane>

@@ -1,7 +1,9 @@
 package com.src.main;
 
+import java.awt.*;
 import java.io.*;
 import java.util.*;
+import java.util.List;
 
 import com.src.*;
 import com.src.Browser.FullBrowser;
@@ -15,16 +17,26 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
+import javafx.util.Pair;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 
 public class MainLayoutController implements Initializable
 {
+    @FXML
+    private Canvas mainCanvas;
     @FXML
     private MenuBar menuBar;
     @FXML
@@ -169,6 +181,9 @@ public class MainLayoutController implements Initializable
             worldSettings.Write();
         });
 
+        DrawInCanvas();
+
+
         backGroundButton.setOnDragOver(this::AcceptFiles);
         backGroundButton.setOnDragDropped(this::HandleBackGround);
 
@@ -217,6 +232,46 @@ public class MainLayoutController implements Initializable
         });
 
     }
+
+    private void DrawInCanvas() {
+        for(JSONObject object : objectsList){
+            switch(object.get("type").toString()) {
+                case "Stationery":
+                    Pair<Integer, Integer> tempSize = SizeOnCanvas(object.get("path").toString());
+                    Image image = new Image(object.get("path").toString());
+                    Pair<Integer, Integer> tempPosition = PositionOnCanvas(Integer.parseInt(object.get("y").toString()),
+                            Integer.parseInt(object.get("x").toString()));
+                    mainCanvas.getGraphicsContext2D().drawImage(image,tempPosition.getKey() ,tempPosition.getValue(),
+                            tempSize.getKey(), tempSize.getValue());
+                    break;
+                case "Movable":
+                    break;
+
+
+
+            }
+
+
+        }
+    }
+
+    private Pair<Integer, Integer> SizeOnCanvas(String path){
+        Image objectImage = new Image(path);
+        int canvasHeight = (int) (objectImage.getHeight() * mainCanvas.getHeight())
+                / Integer.parseInt(windowHeightField.getText());
+        int canvasWidth = (int) (objectImage.getWidth() * mainCanvas.getWidth())
+                / Integer.parseInt(windowWidthField.getText());
+        return new Pair<>(canvasWidth, canvasHeight);
+    }
+
+    private Pair<Integer, Integer> PositionOnCanvas(int x, int y){
+        int positionX = (int) ( x * mainCanvas.getWidth())
+                / Integer.parseInt(windowHeightField.getText());
+        int positionY = (int) (y * mainCanvas.getWidth())
+                / Integer.parseInt(windowWidthField.getText());
+        return new Pair<>(positionX, positionY);
+    }
+
     private void HandleBackGround(DragEvent event){
         File dropFile = event.getDragboard().getFiles().get(0);
         File check = new File( Main.directory + "assets\\" + dropFile.getName());

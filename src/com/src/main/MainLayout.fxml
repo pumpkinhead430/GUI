@@ -139,6 +139,10 @@
         </ScrollPane>
     </right>
    <center>
-      <Canvas fx:id="mainCanvas" height="440.0" width="730.0" BorderPane.alignment="CENTER" />
+      <Pane fx:id="canvasPane" BorderPane.alignment="CENTER">
+         <children>
+            <Canvas fx:id="mainCanvas" height="440.0" width="730.0" />
+         </children>
+      </Pane>
    </center>
 </BorderPane>

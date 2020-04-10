@@ -33,8 +33,11 @@ public class MovableController implements Initializable {
     @FXML
     private GridPane propertyGrid;
     @FXML
+    private CheckBox deafultSelect;
+    @FXML
     private TabPane animationPane;
     private ArrayList<animationTab> animations;
+    public animationTab deafultAnimation = null;
 
     @Override
     public void initialize(java.net.URL arg0, ResourceBundle arg1)
@@ -43,6 +46,22 @@ public class MovableController implements Initializable {
         Main.NumberFilter(healthField);
         Main.NumberFilter(PYField);
         Main.NumberFilter(PXField);
+        animationPane.getSelectionModel().selectedItemProperty().addListener(e -> CheckDefault());
+        deafultSelect.selectedProperty().addListener(e ->{
+            if(deafultSelect.isSelected())
+                deafultAnimation = FindController(animationPane.getSelectionModel().getSelectedItem());
+        });
+    }
+    public void CheckDefault(){
+        if (deafultAnimation != null) {
+            if (animationPane.getSelectionModel().getSelectedItem() == deafultAnimation.tab) {
+                deafultSelect.setSelected(true);
+                deafultSelect.setDisable(true);
+            } else {
+                deafultSelect.setSelected(false);
+                deafultSelect.setDisable(false);
+            }
+        }
     }
     @FXML
     public void CreateAnimation()  {
@@ -56,9 +75,18 @@ public class MovableController implements Initializable {
         PYField.setText(movableObject.get("x").toString());
         PXField.setText(movableObject.get("y").toString());
         for(Object o : ((JSONArray)movableObject.get("animations"))){
+
             animationTab animation = new animationTab( (JSONObject) o);
             animations.add(animation);
             animationPane.getTabs().add(animation.tab);
+            if(Boolean.parseBoolean(((JSONObject) o).get("default").toString())){
+                deafultAnimation = animation;
+            }
+            if (animationPane.getSelectionModel().getSelectedItem() == deafultAnimation.tab) {
+                deafultSelect.setSelected(true);
+                deafultSelect.setDisable(true);
+            }
+
         }
     }
     public void SetJson(JSONObject object){
@@ -76,10 +104,16 @@ public class MovableController implements Initializable {
     }
     @FXML
     public void DeleteAnimation(){
-        Tab tab = animationPane.getSelectionModel().getSelectedItem();
-        animationTab animation = FindController(tab);
-        animations.remove(animation);
-        animationPane.getTabs().remove(tab);
+        if(animationPane.getTabs().size() > 1) {
+            Tab tab = animationPane.getSelectionModel().getSelectedItem();
+            animationTab animation = FindController(tab);
+            animations.remove(animation);
+            animationPane.getTabs().remove(tab);
+            if (animation == deafultAnimation) {
+                deafultAnimation = FindController(animationPane.getTabs().get(0));
+                CheckDefault();
+            }
+        }
     }
 
     public void WriteInfo(){
@@ -89,7 +123,9 @@ public class MovableController implements Initializable {
         movableObject.put("y", PYField.getText());
         JSONArray jsonAnimations = new JSONArray();
         for(animationTab animation : animations){
-            jsonAnimations.add(animation.controller.GetJsonData());
+            JSONObject animationJson = animation.controller.GetJsonData();
+            animationJson.put("default",(animation == deafultAnimation));
+            jsonAnimations.add(animationJson);
         }
         movableObject.put("animations", jsonAnimations);
     }

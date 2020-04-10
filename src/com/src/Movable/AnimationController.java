@@ -97,9 +97,6 @@ public class AnimationController implements Initializable {
 
         JSONArray frames = new JSONArray();
         for(String frame : frameObsList){
-            System.out.println(frame);
-            System.out.println("assets//" + frame);
-            System.out.println("assets/" + frame);
             frames.add("assets/" + frame);
         }
         animation.put("frames", frames);

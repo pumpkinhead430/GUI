@@ -9,6 +9,7 @@ import com.src.*;
 import com.src.Browser.FullBrowser;
 import com.src.Movable.Movable;
 import com.src.Stationery.Stationery;
+import javafx.beans.InvalidationListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -62,6 +63,8 @@ public class MainLayoutController implements Initializable
     private  TextField windowHeightField;
     @FXML
     private  Button backGroundButton;
+    @FXML
+    private Pane canvasPane;
     @FXML
     private Button deleteObject;
     @FXML
@@ -165,6 +168,9 @@ public class MainLayoutController implements Initializable
     public void initialize(java.net.URL arg0, ResourceBundle arg1)
     {
         objectsList =  FXCollections.observableArrayList();
+
+        mainCanvas.heightProperty().bind(canvasPane.heightProperty());
+        mainCanvas.widthProperty().bind(canvasPane.widthProperty());
         objectsLayout.prefHeightProperty().bind(objectsScrollAdd.heightProperty());
         objectsLayout.prefWidthProperty().bind(objectsScrollAdd.widthProperty());
 
@@ -174,15 +180,12 @@ public class MainLayoutController implements Initializable
             VBox.setVgrow(node, Priority.ALWAYS);
         }
         worldSettings = new JsonHandler("src\\assets\\GameData.json");
+        System.out.println(worldSettings);
         objectData = new JsonHandler("src\\assets\\objects.json");
         BringObjects(objectData, objectsList);
-        fullScreenBox.setOnAction(e ->{
-            worldSettings.GetObject().put("fullscreen", fullScreenBox.isSelected());
-            worldSettings.Write();
-        });
 
-        DrawInCanvas();
-
+        mainCanvas.heightProperty().addListener(e -> DrawInCanvas());
+        mainCanvas.widthProperty().addListener(e -> DrawInCanvas());
 
         backGroundButton.setOnDragOver(this::AcceptFiles);
         backGroundButton.setOnDragDropped(this::HandleBackGround);
@@ -211,48 +214,81 @@ public class MainLayoutController implements Initializable
 
         menuBar.setFocusTraversable(true);
         // world settings fields
+        backGroundButton.setText(worldSettings.GetObject().get("background").toString().replace("assets\\", ""));
+        fullScreenBox.setOnAction(e ->{
+            worldSettings.GetObject().put("fullscreen", fullScreenBox.isSelected());
+            worldSettings.Write();
+        });
+        fullScreenBox.setSelected(Boolean.parseBoolean(worldSettings.GetObject().get("fullscreen").toString()));
         titleField.textProperty().addListener((observable, oldValue, newValue) -> {
             worldSettings.GetObject().put("title", newValue);
             worldSettings.Write();
         });
+        titleField.setText(worldSettings.GetObject().get("title").toString());
         Main.NumberFilter(gravityField);
         gravityField.textProperty().addListener((observable, oldValue, newValue) -> {
             worldSettings.GetObject().put("gravity", Integer.parseInt(newValue));
             worldSettings.Write();
         });
+        gravityField.setText(worldSettings.GetObject().get("gravity").toString());
         Main.NumberFilter(windowWidthField);
         windowWidthField.textProperty().addListener((observable, oldValue, newValue) ->{
             worldSettings.GetObject().put("width", Integer.parseInt(newValue));
             worldSettings.Write();
         });
+        windowWidthField.setText(worldSettings.GetObject().get("width").toString());
         Main.NumberFilter(windowHeightField);
         windowHeightField.textProperty().addListener((observable, oldValue, newValue) ->{
             worldSettings.GetObject().put("height", Integer.parseInt(newValue));
             worldSettings.Write();
         });
+        windowHeightField.setText(worldSettings.GetObject().get("height").toString());
 
+        DrawInCanvas();
     }
 
-    private void DrawInCanvas() {
-        for(JSONObject object : objectsList){
-            switch(object.get("type").toString()) {
+    public void DrawInCanvas() {
+        GraphicsContext gc = mainCanvas.getGraphicsContext2D();
+        gc.clearRect(0, 0, mainCanvas.getWidth(), mainCanvas.getHeight());
+        gc.drawImage(new Image(worldSettings.GetObject().get("background").toString()),
+                0, 0, mainCanvas.getWidth(), mainCanvas.getHeight());
+        for (JSONObject object : objectsList) {
+            Pair<Integer, Integer> tempSize, tempPosition;
+            switch (object.get("type").toString()) {
                 case "Stationery":
-                    Pair<Integer, Integer> tempSize = SizeOnCanvas(object.get("path").toString());
-                    Image image = new Image(object.get("path").toString());
-                    Pair<Integer, Integer> tempPosition = PositionOnCanvas(Integer.parseInt(object.get("y").toString()),
+                    tempSize = SizeOnCanvas(object.get("path").toString());
+
+                    tempPosition = PositionOnCanvas(Integer.parseInt(object.get("y").toString()),
                             Integer.parseInt(object.get("x").toString()));
-                    mainCanvas.getGraphicsContext2D().drawImage(image,tempPosition.getKey() ,tempPosition.getValue(),
+
+                    gc.drawImage(new Image(object.get("path").toString()), tempPosition.getValue(), tempPosition.getKey(),
                             tempSize.getKey(), tempSize.getValue());
                     break;
                 case "Movable":
+                    JSONObject defaultAnimation = FindDefaultAnimation(object);
+                    if (defaultAnimation != null) {
+                        String startingFrame = ((JSONArray) defaultAnimation.get("frames")).get(0).toString();
+                        tempSize = SizeOnCanvas(startingFrame);
+
+                        tempPosition = PositionOnCanvas(Integer.parseInt(object.get("y").toString()),
+                                Integer.parseInt(object.get("x").toString()));
+
+                        gc.drawImage(new Image(startingFrame), tempPosition.getValue(), tempPosition.getKey(),
+                                tempSize.getKey(), tempSize.getValue());
+                    }
                     break;
-
-
-
             }
-
-
         }
+    }
+
+    private JSONObject FindDefaultAnimation(JSONObject movable) {
+
+        for(Object o : (JSONArray) movable.get("animations")){
+            if(Boolean.parseBoolean(((JSONObject) o).get("default").toString())){
+                return (JSONObject) o;
+            }
+        }
+        return null;
     }
 
     private Pair<Integer, Integer> SizeOnCanvas(String path){
@@ -267,7 +303,7 @@ public class MainLayoutController implements Initializable
     private Pair<Integer, Integer> PositionOnCanvas(int x, int y){
         int positionX = (int) ( x * mainCanvas.getWidth())
                 / Integer.parseInt(windowHeightField.getText());
-        int positionY = (int) (y * mainCanvas.getWidth())
+        int positionY = (int) (y * mainCanvas.getHeight())
                 / Integer.parseInt(windowWidthField.getText());
         return new Pair<>(positionX, positionY);
     }

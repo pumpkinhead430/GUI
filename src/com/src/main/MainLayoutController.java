@@ -8,6 +8,8 @@ import java.util.List;
 import com.src.*;
 import com.src.Browser.FullBrowser;
 import com.src.Movable.Movable;
+import com.src.ObjectDisplay.ObjectController;
+import com.src.ObjectDisplay.ObjectDisplay;
 import com.src.Stationery.Stationery;
 import javafx.beans.InvalidationListener;
 import javafx.collections.FXCollections;
@@ -137,10 +139,6 @@ public class MainLayoutController implements Initializable
         }
     }
 
-
-
-
-
     @FXML
     private void handleKeyInput(final InputEvent event)
     {
@@ -168,7 +166,6 @@ public class MainLayoutController implements Initializable
     public void initialize(java.net.URL arg0, ResourceBundle arg1)
     {
         objectsList =  FXCollections.observableArrayList();
-
         mainCanvas.heightProperty().bind(canvasPane.heightProperty());
         mainCanvas.widthProperty().bind(canvasPane.widthProperty());
         objectsLayout.prefHeightProperty().bind(objectsScrollAdd.heightProperty());
@@ -330,24 +327,25 @@ public class MainLayoutController implements Initializable
         }
     }
 
-
-
     @FXML
-    private void NewMovableObject(){
-        JSONObject temp = new JSONObject();
-        temp.put("name", "temp(Movable)");
-        temp.put("type", "Movable");
-        temp.put("health", 0);
-        temp.put("x", 0);
-        temp.put("y", 0);
-        JSONArray animations = new JSONArray();
-        JSONObject animation = new JSONObject();
-        animation.put("default", "default");
-        animations.add(animation);
-        temp.put("animations", animations);
-        ((JSONArray)objectData.GetObject().get("Movables")).add(temp);
-        objectsList.add(temp);
+    private void NewObject(){
+        JSONObject temp = ObjectDisplay.display("new object");
+        if(temp != null) {
+            switch (temp.get("type").toString()) {
+                case ("Movable"):
+                    ((JSONArray) objectData.GetObject().get("Movables")).add(temp);
+                    objectsList.add(temp);
+                    break;
+                case ("Stationery"):
+                    ((JSONArray) objectData.GetObject().get("Stationers")).add(temp);
+                    objectsList.add(temp);
+                    break;
+            }
+        }
+
+
     }
+
     @FXML
     private void DeleteObject(){
         JSONObject object = objectsView.getSelectionModel().getSelectedItem();
@@ -360,20 +358,6 @@ public class MainLayoutController implements Initializable
         objectData.Write();
     }
 
-    @FXML
-    private void NewStationaryObject(){
-        JSONObject temp = new JSONObject();
-        temp.put("name", "temp(Stationery)");
-        temp.put("type", "Stationery");
-        temp.put("damage", 0);
-        temp.put("x", 0);
-        temp.put("y", 0);
-        temp.put("path", "");
-        JSONArray ani_start = new JSONArray();
-        temp.put("ani_start",ani_start);
-        ((JSONArray)objectData.GetObject().get("Stationers")).add(temp);
-        objectsList.add(temp);
-    }
 
     public void HandleObjectClick(MouseEvent mouseEvent) {
         if(mouseEvent.getClickCount() == 2){
@@ -381,11 +365,15 @@ public class MainLayoutController implements Initializable
             if(object != null) {
                 switch (object.get("type").toString()) {
                     case ("Stationery"):
-                     Stationery.display("Stationery Edit", object);
-                     break;
+                         Stationery.display("Stationery Edit", object);
+                         break;
                     case ("Movable"):
                         Movable.display("Movable Edit", object);
                         break;
+                    case ("Win"):
+                        System.out.println("win");
+                    case ("loss"):
+                        System.out.println("loss");
                 }
                 objectsView.refresh();
                 objectData.Write();

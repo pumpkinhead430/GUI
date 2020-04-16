@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.src.Win.WinController">
+   <children>
+      <VBox alignment="TOP_CENTER" layoutX="355.0" prefHeight="400.0" prefWidth="245.0" spacing="30.0">
+         <children>
+            <ComboBox fx:id="typeBox" prefWidth="150.0" />
+            <Button mnemonicParsing="false" text="Character" />
+            <Pane prefHeight="97.0" prefWidth="245.0" />
+         </children></VBox>
+   </children>
+</AnchorPane>

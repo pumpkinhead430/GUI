@@ -121,12 +121,11 @@
                         </ScrollPane>
                         <ToolBar prefHeight="49.0" prefWidth="329.0">
                             <items>
-                                <Button mnemonicParsing="false" onAction="#NewMovableObject" text="Add Movable">
+                                <Button fx:id="newObject" mnemonicParsing="false" onAction="#NewObject" text="New Object">
                                     <opaqueInsets>
                                         <Insets />
                                     </opaqueInsets>
                                 </Button>
-                                <Button mnemonicParsing="false" onAction="#NewStationaryObject" text="Add Stationary" />
                                 <Button fx:id="deleteObject" alignment="TOP_LEFT" mnemonicParsing="false" onAction="#DeleteObject" text="Delete" />
                             </items>
                             <opaqueInsets>

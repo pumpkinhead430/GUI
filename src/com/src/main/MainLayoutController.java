@@ -11,6 +11,7 @@ import com.src.Movable.Movable;
 import com.src.ObjectDisplay.ObjectController;
 import com.src.ObjectDisplay.ObjectDisplay;
 import com.src.Stationery.Stationery;
+import com.src.Win.Win;
 import javafx.beans.InvalidationListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -46,7 +47,7 @@ public class MainLayoutController implements Initializable
     private ScrollPane objectsScroll;
     @FXML
     private ListView<JSONObject> objectsView;
-    private ObservableList<JSONObject> objectsList;
+    public ObservableList<JSONObject> objectsList;
     @FXML
     private  TextField gravityField;
     @FXML
@@ -69,6 +70,8 @@ public class MainLayoutController implements Initializable
     private Pane canvasPane;
     @FXML
     private Button deleteObject;
+
+    private ArrayList<Boolean> idList = new ArrayList<>();
     @FXML
     private CheckBox fullScreenBox;
     @FXML
@@ -181,6 +184,8 @@ public class MainLayoutController implements Initializable
         objectData = new JsonHandler("src\\assets\\objects.json");
         BringObjects(objectData, objectsList);
 
+        System.out.println(idList);
+
         mainCanvas.heightProperty().addListener(e -> DrawInCanvas());
         mainCanvas.widthProperty().addListener(e -> DrawInCanvas());
 
@@ -264,14 +269,16 @@ public class MainLayoutController implements Initializable
                 case "Movable":
                     JSONObject defaultAnimation = FindDefaultAnimation(object);
                     if (defaultAnimation != null) {
-                        String startingFrame = ((JSONArray) defaultAnimation.get("frames")).get(0).toString();
-                        tempSize = SizeOnCanvas(startingFrame);
+                        if(((JSONArray)defaultAnimation.get("frames")).size() > 0) {
+                            String startingFrame = ((JSONArray) defaultAnimation.get("frames")).get(0).toString();
+                            tempSize = SizeOnCanvas(startingFrame);
 
-                        tempPosition = PositionOnCanvas(Integer.parseInt(object.get("y").toString()),
-                                Integer.parseInt(object.get("x").toString()));
+                            tempPosition = PositionOnCanvas(Integer.parseInt(object.get("y").toString()),
+                                    Integer.parseInt(object.get("x").toString()));
 
-                        gc.drawImage(new Image(startingFrame), tempPosition.getValue(), tempPosition.getKey(),
-                                tempSize.getKey(), tempSize.getValue());
+                            gc.drawImage(new Image(startingFrame), tempPosition.getValue(), tempPosition.getKey(),
+                                    tempSize.getKey(), tempSize.getValue());
+                        }
                     }
                     break;
             }
@@ -319,12 +326,35 @@ public class MainLayoutController implements Initializable
         JSONObject main = objectData.GetObject();
         JSONArray movables = (JSONArray) main.get("Movables");
         for (Object movable : movables) {
+            LockId((JSONObject) movable);
             objectsList.add((JSONObject) movable);
+
         }
         JSONArray stationers = (JSONArray) main.get("Stationers");
         for (Object stationery : stationers) {
+            LockId((JSONObject) stationery);
             objectsList.add((JSONObject) stationery);
+
         }
+        JSONArray wins = (JSONArray) main.get("Wins");
+        for (Object win : wins) {
+            LockId((JSONObject) win);
+            objectsList.add((JSONObject) win);
+        }
+
+        JSONArray losses = (JSONArray) main.get("Losses");
+        for (Object loss : losses) {
+            LockId((JSONObject) loss);
+            objectsList.add((JSONObject) loss);
+        }
+
+    }
+
+    private void LockId(JSONObject object){
+        while (idList.size() <= Integer.parseInt(object.get("id").toString())){
+            idList.add(false);
+        }
+        idList.set(Integer.parseInt(object.get("id").toString()), true);
     }
 
     @FXML
@@ -334,28 +364,54 @@ public class MainLayoutController implements Initializable
             switch (temp.get("type").toString()) {
                 case ("Movable"):
                     ((JSONArray) objectData.GetObject().get("Movables")).add(temp);
-                    objectsList.add(temp);
                     break;
                 case ("Stationery"):
                     ((JSONArray) objectData.GetObject().get("Stationers")).add(temp);
-                    objectsList.add(temp);
+                    break;
+                case("Win"):
+                    ((JSONArray) objectData.GetObject().get("Wins")).add(temp);
+                    break;
+                case("Loss"):
+                    ((JSONArray) objectData.GetObject().get("Losses")).add(temp);
                     break;
             }
+            GiveId(temp);
+            objectsList.add(temp);
+            objectData.Write();
+            DrawInCanvas();
         }
 
 
     }
 
+    private void GiveId(JSONObject object){
+        for(int i = 0; i < idList.size(); i++){
+            if(!idList.get(i)) {
+                object.put("id", i);
+                return;
+            }
+        }
+        idList.add(true);
+        object.put("id", idList.size() - 1);
+    }
+
     @FXML
     private void DeleteObject(){
+        JSONObject data = objectData.GetObject();
         JSONObject object = objectsView.getSelectionModel().getSelectedItem();
         objectsList.remove(object);
-        JSONObject data = objectData.GetObject();
-        JSONArray movables = (JSONArray)data.get("Movables");
-        movables.remove(object);
-        JSONArray stationers = (JSONArray)data.get("Stationers");
-        stationers.remove(object);
+        switch (object.get("type").toString()){
+            case "Movable":
+                ((JSONArray)data.get("Movables")).remove(object);
+            case "Stationery":
+                ((JSONArray)data.get("Stationers")).remove(object);
+            case "Win":
+                ((JSONArray)data.get("Wins")).remove(object);
+            case "Loss":
+                ((JSONArray)data.get("Losses")).remove(object);
+        }
         objectData.Write();
+        DrawInCanvas();
     }
 
 
@@ -371,9 +427,11 @@ public class MainLayoutController implements Initializable
                         Movable.display("Movable Edit", object);
                         break;
                     case ("Win"):
-                        System.out.println("win");
-                    case ("loss"):
-                        System.out.println("loss");
+                        Win.display("Win Edit", object, objectsList);
+                        break;
+                    case ("Loss"):
+                        Win.display("Loss Edit", object, objectsList);
+                        break;
                 }
                 objectsView.refresh();
                 objectData.Write();

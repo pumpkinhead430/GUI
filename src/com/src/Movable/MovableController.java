@@ -82,11 +82,10 @@ public class MovableController implements Initializable {
             if(Boolean.parseBoolean(((JSONObject) o).get("default").toString())){
                 deafultAnimation = animation;
             }
-            if (animationPane.getSelectionModel().getSelectedItem() == deafultAnimation.tab) {
-                deafultSelect.setSelected(true);
-                deafultSelect.setDisable(true);
-            }
-
+        }
+        if (animationPane.getSelectionModel().getSelectedItem() == deafultAnimation.tab) {
+            deafultSelect.setSelected(true);
+            deafultSelect.setDisable(true);
         }
     }
     public void SetJson(JSONObject object){
@@ -118,9 +117,9 @@ public class MovableController implements Initializable {
 
     public void WriteInfo(){
         movableObject.put("name", nameField.getText());
-        movableObject.put("health", healthField.getText());
-        movableObject.put("x", PXField.getText());
-        movableObject.put("y", PYField.getText());
+        movableObject.put("health", Integer.parseInt(healthField.getText()));
+        movableObject.put("x", Integer.parseInt(PXField.getText()));
+        movableObject.put("y", Integer.parseInt(PYField.getText()));
         JSONArray jsonAnimations = new JSONArray();
         for(animationTab animation : animations){
             JSONObject animationJson = animation.controller.GetJsonData();

@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.io.Reader;
 
 public class JsonHandler {
-    private String fileName;
+    private final String fileName;
     private JSONObject jsonObject;
 
     public JsonHandler(String fileName){

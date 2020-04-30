@@ -18,7 +18,9 @@ import javafx.scene.layout.TilePane;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import javax.swing.event.ChangeListener;
 import java.io.File;
+import java.net.http.WebSocket;
 import java.util.*;
 
 
@@ -57,6 +59,8 @@ public class AnimationController implements Initializable {
         frameList.setItems(frameObsList);
         aniStartObsList = FXCollections.observableArrayList();
         aniStartList.setItems(aniStartObsList);
+
+
         damageField.textProperty().addListener((observable, oldValue, newValue) -> {
             if(!newValue.matches("-*[0-9]*")){
                 damageField.setText(oldValue);
@@ -89,13 +93,16 @@ public class AnimationController implements Initializable {
         JSONObject animation = new JSONObject();
 
         animation.put("name", nameField.getText());
-        animation.put("forcey", YForceField.getText());
-        animation.put("forcex", XForceField.getText());
-        animation.put("damage", damageField.getText());
+        animation.put("forcey", Integer.parseInt(YForceField.getText()));
+        animation.put("forcex", Integer.parseInt(XForceField.getText()));
+        animation.put("damage", Integer.parseInt(damageField.getText()));
         animation.put("trigger", triggerField.getText());
-        animation.put("time", timeField.getText());
+        animation.put("time", Integer.parseInt(timeField.getText()));
 
         JSONArray frames = new JSONArray();
+        if(frameObsList.size() == 0){
+            frameObsList.add("default.png");
+        }
         for(String frame : frameObsList){
             frames.add("assets/" + frame);
         }

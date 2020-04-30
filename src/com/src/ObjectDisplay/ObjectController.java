@@ -43,7 +43,10 @@ public class ObjectController implements  Initializable {
                     ChosenObject = NewStationaryObject();
                     break;
                 case "Win":
-                    NewWinObject();
+                    ChosenObject = NewWinObject();
+                    break;
+                case "Loss":
+                    ChosenObject = NewLossObject();
                     break;
 
             }
@@ -63,7 +66,15 @@ public class ObjectController implements  Initializable {
         temp.put("y", 0);
         JSONArray animations = new JSONArray();
         JSONObject animation = new JSONObject();
-        animation.put("default", "default");
+        animation.put("forcey", 0);
+        animation.put("forcex", 0);
+        animation.put("default", true);
+        animation.put("damage", 0);
+        animation.put("name", "temp(animation)");
+        animation.put("trigger", " ");
+        animation.put("time", 1);
+        animation.put("frames",  new JSONArray());
+        animation.put("ani_starter",  new JSONArray());
         animations.add(animation);
         temp.put("animations", animations);
         return temp;
@@ -71,13 +82,24 @@ public class ObjectController implements  Initializable {
     private JSONObject NewWinObject(){
         JSONObject temp = new JSONObject();
         temp.put("name", "temp(Win)");
-        temp.put("type", "Place");
-        JSONArray place = new JSONArray();
-        place.add(0);
-        place.add(0);
-        place.add(1);
-        place.add(1);
-        temp.put("place", place);
+        temp.put("type", "Win");
+        temp.put("action", "place");
+        temp.put("startX", 0);
+        temp.put("endX", 0);
+        temp.put("startY", 0);
+        temp.put("endY", 0);
+        return temp;
+    }
+
+    private JSONObject NewLossObject(){
+        JSONObject temp = new JSONObject();
+        temp.put("name", "temp(Loss)");
+        temp.put("type", "Loss");
+        temp.put("action", "place");
+        temp.put("startX", 0);
+        temp.put("endX", 0);
+        temp.put("startY", 0);
+        temp.put("endY", 0);
         return temp;
     }
 
@@ -90,7 +112,7 @@ public class ObjectController implements  Initializable {
         temp.put("damage", 0);
         temp.put("x", 0);
         temp.put("y", 0);
-        temp.put("path", "");
+        temp.put("path", "assets/default.png");
         JSONArray ani_start = new JSONArray();
         temp.put("ani_start",ani_start);
         return temp;

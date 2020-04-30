@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.DataFormat;
 import javafx.stage.Stage;
 import org.apache.commons.io.FileUtils;
 
@@ -29,6 +30,8 @@ public class Main extends Application
     {
         Application.launch(Main.class, arguments);
     }
+    public static final DataFormat jsonObjectFormat = new DataFormat(
+            "imported JSONSimple(JSON object)");
 
 
     @Override

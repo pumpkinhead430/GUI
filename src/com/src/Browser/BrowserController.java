@@ -18,6 +18,7 @@ public class BrowserController implements Initializable {
     @FXML
     private TreeView<String> browseTree;
     private File file;
+    public String type = "";
     @Override
     public void initialize(java.net.URL arg0, ResourceBundle arg1)
     {
@@ -26,7 +27,7 @@ public class BrowserController implements Initializable {
         TreeItem<String> root = new TreeItem<>();
         root.setExpanded(true);
         browseTree.setRoot(root);
-        for(File path:File.listRoots())
+        for(File path : File.listRoots())
         {
             TreeItem<String> parentItem = new TreeItem<>(path.getPath());
             parentItem.expandedProperty().addListener((observableValue, aBoolean, t1) -> AddExpansionProperty(observableValue, t1));
@@ -43,11 +44,25 @@ public class BrowserController implements Initializable {
             TreeItem<String> treeItem = browseTree.getSelectionModel().getSelectedItem();
             if(treeItem != null) {
                 File treeFile = GetFileFromNode(treeItem);
-                if (treeFile.isFile() && Main.IsPicture(treeFile.getName())) {
-                    Stage thisWindow = (Stage) browseTree.getScene().getWindow();
-                    thisWindow.close();
-                    file = treeFile;
+
+                if(type.equals("pic")) {
+                    if (treeFile.isFile() && Main.IsPicture(treeFile.getName())) {
+                        Stage thisWindow = (Stage) browseTree.getScene().getWindow();
+                        thisWindow.close();
+                        file = treeFile;
+                    }
                 }
+                else {
+
+                        if (type.equals("dir")) {
+                            System.out.println(treeFile);
+                            if (treeFile.isDirectory()) {
+                                Stage thisWindow = (Stage) browseTree.getScene().getWindow();
+                                thisWindow.close();
+                                file = treeFile;
+                            }
+                        }
+                    }
             }
         }
 
@@ -57,12 +72,21 @@ public class BrowserController implements Initializable {
     {
         File treeFile = GetFileFromNode(newValue);
         LoadLevels(2, newValue);
-        if(treeFile.isFile() && Main.IsPicture(treeFile.getName()))
-        {
-            Stage thisWindow = (Stage)browseTree.getScene().getWindow();
-            thisWindow.close();
-            file =  treeFile;
-        }
+        if(type.equals("pic"))
+            if(treeFile.isFile() && Main.IsPicture(treeFile.getName()))
+            {
+                Stage thisWindow = (Stage)browseTree.getScene().getWindow();
+                thisWindow.close();
+                file =  treeFile;
+            }
+        else
+            if(type.equals("dir")){
+                if (treeFile.isDirectory()) {
+                    Stage thisWindow = (Stage) browseTree.getScene().getWindow();
+                    thisWindow.close();
+                    file = treeFile;
+                }
+            }
     }
     private void AddExpansionProperty(ObservableValue<? extends Boolean> observableValue, Boolean t1)
     {
@@ -98,7 +122,6 @@ public class BrowserController implements Initializable {
     public File GetFileFromNode(TreeItem<String> newValue){
         TreeItem<String> tempValue = newValue;
         String path = newValue.getValue();
-        //System.out.println(path);
         while(!browseTree.getRoot().getChildren().contains(tempValue))
         {
             path = tempValue.getParent().getValue() + "\\" + path;

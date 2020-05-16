@@ -8,11 +8,13 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Screen;
 import netscape.javascript.JSObject;
 import org.json.simple.JSONObject;
 
@@ -39,6 +41,8 @@ public class WinController implements Initializable {
     private TextField startYField;
     @FXML
     private TextField endYField;
+    @FXML
+    private Button screenButton;
     @FXML
     private GridPane positionGrid;
     private ObservableList<JSONObject> objectsList;
@@ -102,6 +106,25 @@ public class WinController implements Initializable {
         });
     }
 
+    @FXML
+    private void handlePictureButton() {
+        File Picture = FullBrowser.display("Background", "pic");
+        if(Picture != null){
+            if(!Main.files.contains(Picture)) {
+                Main.CopyFile(Picture, new File(Main.directory + "\\assets"));
+            }
+            SwitchPicture(Picture.getName());
+        }
+    }
+
+    public void SwitchPicture(String name){
+        File asset_directory = new File(Main.directory + "\\assets");
+        File picture = new File(asset_directory + "\\" + name);
+        if(picture.exists()) {
+            screenButton.setText(picture.getName());
+        }
+    }
+
 
     public void SetObjects(ObservableList<JSONObject> objects){
         objectsList = objects;
@@ -158,6 +181,7 @@ public class WinController implements Initializable {
         startYField.setText(winObject.get("startY").toString());
         endYField.setText(winObject.get("endY").toString());
         typeBox.getSelectionModel().select(winObject.get("action").toString());
+        screenButton.setText(winObject.get("screen").toString().replace("assets\\", ""));
 
         HandleSelected();
     }
@@ -170,5 +194,9 @@ public class WinController implements Initializable {
         winObject.put("endY", Integer.parseInt(endYField.getText()));
         winObject.put("action", typeBox.getSelectionModel().getSelectedItem());
         winObject.put("characterId", characterId);
+        if(!screenButton.getText().equals("Screen"))
+            winObject.put("screen", "assets\\" + screenButton.getText());
+        else
+            winObject.put("screen", "assets\\default.png");
     }
 }

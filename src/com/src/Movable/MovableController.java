@@ -1,5 +1,9 @@
 package com.src.Movable;
 import com.src.main.Main;
+import javafx.beans.InvalidationListener;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -9,6 +13,7 @@ import javafx.scene.layout.VBox;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import javax.swing.event.ChangeListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -25,14 +30,6 @@ public class MovableController implements Initializable {
     @FXML
     private TextField healthField;
     @FXML
-    private ScrollPane propertyScroll;
-    @FXML
-    private VBox propertyBox;
-    @FXML
-    private HBox mainBox;
-    @FXML
-    private GridPane propertyGrid;
-    @FXML
     private CheckBox deafultSelect;
     @FXML
     private TabPane animationPane;
@@ -47,6 +44,7 @@ public class MovableController implements Initializable {
         Main.NumberFilter(PYField);
         Main.NumberFilter(PXField);
         animationPane.getSelectionModel().selectedItemProperty().addListener(e -> CheckDefault());
+
         deafultSelect.selectedProperty().addListener(e ->{
             if(deafultSelect.isSelected())
                 deafultAnimation = FindController(animationPane.getSelectionModel().getSelectedItem());
@@ -65,7 +63,19 @@ public class MovableController implements Initializable {
     }
     @FXML
     public void CreateAnimation()  {
-        animationTab animation = new animationTab();
+        JSONObject animationJ = new JSONObject();
+        animationJ.put("forcey", 0);
+        animationJ.put("forcex", 0);
+        animationJ.put("default", true);
+        animationJ.put("damage", 0);
+        animationJ.put("name", "temp(animation)");
+        animationJ.put("trigger", " ");
+        animationJ.put("time", 1);
+        JSONArray frames = new JSONArray();
+        frames.add("assets\\default.png");
+        animationJ.put("frames",  frames);
+        animationJ.put("ani_starter",  new JSONArray());
+        animationTab animation = new animationTab(animationJ);
         animations.add(animation);
         animationPane.getTabs().add(animation.tab);
     }

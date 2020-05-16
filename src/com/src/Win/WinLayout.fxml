@@ -12,6 +12,7 @@
                <children>
                   <ComboBox fx:id="typeBox" prefWidth="150.0" />
                   <Button fx:id="characterButton" mnemonicParsing="false" text="Character" />
+                  <Button fx:id="screenButton" mnemonicParsing="false" onAction="#handlePictureButton" text="Screen" />
                   <HBox prefHeight="38.0" prefWidth="245.0" spacing="20.0">
                      <children>
                         <Label text="Name:" />

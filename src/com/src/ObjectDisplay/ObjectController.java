@@ -73,7 +73,9 @@ public class ObjectController implements  Initializable {
         animation.put("name", "temp(animation)");
         animation.put("trigger", " ");
         animation.put("time", 1);
-        animation.put("frames",  new JSONArray());
+        JSONArray frames = new JSONArray();
+        frames.add("assets\\default.png");
+        animation.put("frames",  frames);
         animation.put("ani_starter",  new JSONArray());
         animations.add(animation);
         temp.put("animations", animations);

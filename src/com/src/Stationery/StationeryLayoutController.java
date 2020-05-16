@@ -51,7 +51,7 @@ public class StationeryLayoutController implements Initializable {
     private Button browse;
     @FXML
     private void handlePictureButton() {
-        File Picture = FullBrowser.display("Background");
+        File Picture = FullBrowser.display("Background", "pic");
         if(Picture != null){
             if(!Main.files.contains(Picture)) {
                 Main.CopyFile(Picture, new File(Main.directory + "\\assets"));

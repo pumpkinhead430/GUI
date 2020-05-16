@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane fx:id="mainPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.src.PathTaker.PathTakerController">
+   <children>
+      <TextField fx:id="pathField" disable="true" editable="false" layoutX="14.0" layoutY="188.0" prefHeight="25.0" prefWidth="529.0" promptText="File location..." />
+      <Button layoutX="543.0" layoutY="188.0" mnemonicParsing="false" onAction="#HandleBrowsePath" prefHeight="25.0" prefWidth="27.0" text="..." />
+      <Text layoutX="14.0" layoutY="175.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Chosse file:" textAlignment="CENTER" wrappingWidth="94.13671875">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Text>
+      <Button layoutX="219.0" layoutY="257.0" mnemonicParsing="false" onAction="#Finish" prefHeight="25.0" prefWidth="162.0" text="Okay" />
+   </children>
+</AnchorPane>

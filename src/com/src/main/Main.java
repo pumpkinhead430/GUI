@@ -1,4 +1,5 @@
 package com.src.main;
+import com.src.PathTaker.PathTaker;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -28,7 +29,7 @@ public class Main extends Application
     public static ArrayList<File> files = new ArrayList<>();
     public static void main(String[] arguments)
     {
-        Application.launch(Main.class, arguments);
+        launch(arguments);
     }
     public static final DataFormat jsonObjectFormat = new DataFormat(
             "imported JSONSimple(JSON object)");
@@ -44,6 +45,7 @@ public class Main extends Application
         scene.getStylesheets().add("Viper.css");
         stage.setScene(scene);
         stage.show();
+
         Thread thread =  new Thread(() -> {
             while (stage.isShowing()) {
 
@@ -84,7 +86,7 @@ public class Main extends Application
         field.getProperties().put("vkType", "numeric");
         field.setTextFormatter(new TextFormatter<>(c -> {
             if (c.isContentChange()){
-                if(c.getControlNewText().matches("[0-9]*")){
+                if(c.getControlNewText().matches("[0-9]+")){
                     return c;
                 }
 
@@ -99,7 +101,7 @@ public class Main extends Application
 
         int i = fileName.lastIndexOf('.');
         if (i > 0) {
-            extension = fileName.substring(i+1);
+            extension = fileName.substring(i+1).toLowerCase();
         }
         for(String format : pictureFormat)
             if(extension.equals(format))

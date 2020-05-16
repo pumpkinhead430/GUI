@@ -62,22 +62,23 @@ public class AnimationController implements Initializable {
 
 
         damageField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if(!newValue.matches("-*[0-9]*")){
+            if(!newValue.matches("-*[0-9]+")){
                 damageField.setText(oldValue);
             }
         });
         YForceField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if(!newValue.matches("-*[0-9]*")){
+            if(!newValue.matches("-*[0-9]+")){
                 YForceField.setText(oldValue);
             }
         });
         XForceField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if(!newValue.matches("-*[0-9]*")){
+            if(!newValue.matches("-*[0-9]+")){
                 XForceField.setText(oldValue);
             }
         });
         triggerField.textProperty().addListener((observable, oldValue, newValue) -> {
-            triggerField.setText(newValue.substring(newValue.length() -1));
+            if(!newValue.equals(""))
+                triggerField.setText(newValue.substring(newValue.length() -1));
         });
         nameField.textProperty().addListener((observable, oldValue, newValue) -> {
             mainTab.setText(newValue);
@@ -138,7 +139,7 @@ public class AnimationController implements Initializable {
     }
     @FXML
     public void AddFrame(){
-        File frame = FullBrowser.display("choose Frame");
+        File frame = FullBrowser.display("choose Frame", "pic");
         if(frame != null) {
             if(!Main.ExsitsInAssets(frame.getName()))
                 Main.CopyFile(frame, Main.assets);

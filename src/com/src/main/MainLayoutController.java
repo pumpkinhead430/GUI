@@ -10,6 +10,7 @@ import com.src.Browser.FullBrowser;
 import com.src.Movable.Movable;
 import com.src.ObjectDisplay.ObjectController;
 import com.src.ObjectDisplay.ObjectDisplay;
+import com.src.PathTaker.PathTaker;
 import com.src.Stationery.Stationery;
 import com.src.Win.Win;
 import javafx.beans.InvalidationListener;
@@ -88,7 +89,7 @@ public class MainLayoutController implements Initializable
 
     @FXML
     private void handleBackGroundButton() {
-        File Picture = FullBrowser.display("Background");
+        File Picture = FullBrowser.display("Background", "pic");
         if(Picture != null){
             if(!Main.files.contains(Picture)) {
                 Main.CopyFile(Picture, new File(Main.directory + "\\assets"));
@@ -101,7 +102,7 @@ public class MainLayoutController implements Initializable
     }
     @FXML
     private void HandleImport() {
-        File file = FullBrowser.display("Import Picture");
+        File file = FullBrowser.display("Import Picture", "pic");
         if (!Main.files.contains(file))
             Main.CopyFile(file, new File(Main.directory + "\\assets"));
     }
@@ -388,6 +389,7 @@ public class MainLayoutController implements Initializable
         for(int i = 0; i < idList.size(); i++){
             if(!idList.get(i)) {
                 object.put("id", i);
+                idList.set(i, true);
                 return;
             }
         }

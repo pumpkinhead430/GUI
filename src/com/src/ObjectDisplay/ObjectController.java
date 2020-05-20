@@ -90,6 +90,8 @@ public class ObjectController implements  Initializable {
         temp.put("endX", 0);
         temp.put("startY", 0);
         temp.put("endY", 0);
+        temp.put("screen", "asset\\default.png");
+        temp.put("characterId", -1);
         return temp;
     }
 
@@ -101,7 +103,9 @@ public class ObjectController implements  Initializable {
         temp.put("startX", 0);
         temp.put("endX", 0);
         temp.put("startY", 0);
+        temp.put("screen", "asset\\default.png");
         temp.put("endY", 0);
+        temp.put("characterId", -1);
         return temp;
     }
 

@@ -2,14 +2,11 @@ package com.src.PathTaker;
 
 import com.src.Browser.FullBrowser;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
-import javafx.scene.control.TextField;
 import java.io.File;
-import java.net.URL;
-import java.util.ResourceBundle;
 
 public class PathTakerController {
     @FXML

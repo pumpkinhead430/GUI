@@ -1,19 +1,12 @@
 package com.src.main;
 
-import java.awt.*;
-import java.io.*;
-import java.util.*;
-import java.util.List;
-
-import com.src.*;
 import com.src.Browser.FullBrowser;
+import com.src.JsonHandler;
 import com.src.Movable.Movable;
-import com.src.ObjectDisplay.ObjectController;
 import com.src.ObjectDisplay.ObjectDisplay;
 import com.src.PathTaker.PathTaker;
 import com.src.Stationery.Stationery;
 import com.src.Win.Win;
-import javafx.beans.InvalidationListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -21,21 +14,22 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
+import javafx.stage.Stage;
 import javafx.util.Pair;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 
 public class MainLayoutController implements Initializable
@@ -81,90 +75,6 @@ public class MainLayoutController implements Initializable
     private TilePane importFiles;
     private JsonHandler worldSettings;
     private JsonHandler objectData;
-    @FXML
-    private void handleAboutAction(final ActionEvent event)
-    {
-        provideAboutFunctionality();
-    }
-
-    @FXML
-    private void handleBackGroundButton() {
-        File Picture = FullBrowser.display("Background", "pic");
-        if(Picture != null){
-            if(!Main.files.contains(Picture)) {
-                Main.CopyFile(Picture, new File(Main.directory + "\\assets"));
-            }
-            backGroundButton.setText(Picture.getName());
-            worldSettings.GetObject().put("background", "assets\\" + Picture.getName());
-            worldSettings.Write();
-        }
-
-    }
-    @FXML
-    private void HandleImport() {
-        File file = FullBrowser.display("Import Picture", "pic");
-        if (!Main.files.contains(file))
-            Main.CopyFile(file, new File(Main.directory + "\\assets"));
-    }
-    public void AddToImportBox(File file){
-        if(file != null) {
-            ImageView temp = new ImageView();
-            temp.setImage(new Image(file.toURI().toString()));
-            temp.setPickOnBounds(true);
-            temp.setOnDragDetected(e ->{
-                Dragboard db = temp.startDragAndDrop(TransferMode.COPY);
-                ClipboardContent content = new ClipboardContent();
-                content.putFiles(Collections.singletonList(file));
-                db.setContent(content);
-                e.consume();
-            });
-
-            Main.ReSizePicture(175, 175, temp);
-            VBox tempLayout = new VBox(5);
-            tempLayout.setMaxWidth(175);
-            Label tempName = new Label(file.getName());
-            tempLayout.setAlignment(Pos.CENTER);
-            tempLayout.getChildren().addAll(temp, tempName);
-            importFiles.getChildren().add(tempLayout);
-        }
-    }
-
-    public void RemoveFile(File file){
-        for(Node layout :importFiles.getChildren()){
-            VBox fullLayout = (VBox)layout;
-            for(Node layoutFile : fullLayout.getChildren()){
-                if(layoutFile instanceof Label)
-                    if(((Label) layoutFile).getText().equals(file.getName())){
-                        importFiles.getChildren().remove(fullLayout);
-                        return;
-                    }
-
-            }
-        }
-    }
-
-    @FXML
-    private void handleKeyInput(final InputEvent event)
-    {
-        if (event instanceof KeyEvent)
-        {
-            final KeyEvent keyEvent = (KeyEvent) event;
-            if (keyEvent.isControlDown() && keyEvent.getCode() == KeyCode.A)
-            {
-                provideAboutFunctionality();
-            }
-        }
-    }
-
-
-    private void provideAboutFunctionality()
-    {
-        System.out.println("You clicked on About!");
-    }
-
-
-
-
 
     @Override
     public void initialize(java.net.URL arg0, ResourceBundle arg1)
@@ -181,11 +91,9 @@ public class MainLayoutController implements Initializable
             VBox.setVgrow(node, Priority.ALWAYS);
         }
         worldSettings = new JsonHandler("src\\assets\\GameData.json");
-        System.out.println(worldSettings);
         objectData = new JsonHandler("src\\assets\\objects.json");
         BringObjects(objectData, objectsList);
 
-        System.out.println(idList);
 
         mainCanvas.heightProperty().addListener(e -> DrawInCanvas());
         mainCanvas.widthProperty().addListener(e -> DrawInCanvas());
@@ -250,6 +158,40 @@ public class MainLayoutController implements Initializable
         DrawInCanvas();
     }
 
+    @FXML
+    private void handleBackGroundButton() {
+        File Picture = FullBrowser.display("Background", "pic");
+        if(Picture != null){
+            if(!Main.files.contains(Picture)) {
+                Main.CopyFile(Picture, new File(Main.directory + "\\assets"));
+            }
+            backGroundButton.setText(Picture.getName());
+            worldSettings.GetObject().put("background", "assets\\" + Picture.getName());
+            worldSettings.Write();
+        }
+
+    }
+
+    private JSONObject FindDefaultAnimation(JSONObject movable) {
+
+        for(Object o : (JSONArray) movable.get("animations")){
+            if(Boolean.parseBoolean(((JSONObject) o).get("default").toString())){
+                return (JSONObject) o;
+            }
+        }
+        return null;
+    }
+    private void HandleBackGround(DragEvent event){
+        File dropFile = event.getDragboard().getFiles().get(0);
+        File check = new File( Main.directory + "assets\\" + dropFile.getName());
+        if(!check.exists())
+            Main.CopyFile(dropFile, new File(Main.directory + "assets"));
+        backGroundButton.setText(dropFile.getName());
+        worldSettings.GetObject().put("background", "assets\\" + dropFile.getName());
+        worldSettings.Write();
+    }
+    //-----------------------------------------------------------------------------------------------------------------
+    // canvas related functions
     public void DrawInCanvas() {
         GraphicsContext gc = mainCanvas.getGraphicsContext2D();
         gc.clearRect(0, 0, mainCanvas.getWidth(), mainCanvas.getHeight());
@@ -261,10 +203,10 @@ public class MainLayoutController implements Initializable
                 case "Stationery":
                     tempSize = SizeOnCanvas(object.get("path").toString());
 
-                    tempPosition = PositionOnCanvas(Integer.parseInt(object.get("y").toString()),
-                            Integer.parseInt(object.get("x").toString()));
+                    tempPosition = PositionOnCanvas(Integer.parseInt(object.get("x").toString()),
+                            Integer.parseInt(object.get("y").toString()));
 
-                    gc.drawImage(new Image(object.get("path").toString()), tempPosition.getValue(), tempPosition.getKey(),
+                    gc.drawImage(new Image(object.get("path").toString()), tempPosition.getKey(), tempPosition.getValue(),
                             tempSize.getKey(), tempSize.getValue());
                     break;
                 case "Movable":
@@ -274,26 +216,16 @@ public class MainLayoutController implements Initializable
                             String startingFrame = ((JSONArray) defaultAnimation.get("frames")).get(0).toString();
                             tempSize = SizeOnCanvas(startingFrame);
 
-                            tempPosition = PositionOnCanvas(Integer.parseInt(object.get("y").toString()),
-                                    Integer.parseInt(object.get("x").toString()));
+                            tempPosition = PositionOnCanvas(Integer.parseInt(object.get("x").toString()),
+                                    Integer.parseInt(object.get("y").toString()));
 
-                            gc.drawImage(new Image(startingFrame), tempPosition.getValue(), tempPosition.getKey(),
+                            gc.drawImage(new Image(startingFrame), tempPosition.getKey(), tempPosition.getValue(),
                                     tempSize.getKey(), tempSize.getValue());
                         }
                     }
                     break;
             }
         }
-    }
-
-    private JSONObject FindDefaultAnimation(JSONObject movable) {
-
-        for(Object o : (JSONArray) movable.get("animations")){
-            if(Boolean.parseBoolean(((JSONObject) o).get("default").toString())){
-                return (JSONObject) o;
-            }
-        }
-        return null;
     }
 
     private Pair<Integer, Integer> SizeOnCanvas(String path){
@@ -306,23 +238,17 @@ public class MainLayoutController implements Initializable
     }
 
     private Pair<Integer, Integer> PositionOnCanvas(int x, int y){
+
         int positionX = (int) ( x * mainCanvas.getWidth())
-                / Integer.parseInt(windowHeightField.getText());
-        int positionY = (int) (y * mainCanvas.getHeight())
                 / Integer.parseInt(windowWidthField.getText());
+        int positionY = (int) (y * mainCanvas.getHeight())
+                / Integer.parseInt(windowHeightField.getText());
         return new Pair<>(positionX, positionY);
     }
 
-    private void HandleBackGround(DragEvent event){
-        File dropFile = event.getDragboard().getFiles().get(0);
-        File check = new File( Main.directory + "assets\\" + dropFile.getName());
-        if(!check.exists())
-            Main.CopyFile(dropFile, new File(Main.directory + "assets"));
-        backGroundButton.setText(dropFile.getName());
-        worldSettings.GetObject().put("background", "assets\\" + dropFile.getName());
-        worldSettings.Write();
-    }
-
+    //-----------------------------------------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------------------------
+    //list view related functions
     private void BringObjects(JsonHandler objectData, ObservableList<JSONObject> objectsList) {
         JSONObject main = objectData.GetObject();
         JSONArray movables = (JSONArray) main.get("Movables");
@@ -349,13 +275,6 @@ public class MainLayoutController implements Initializable
             objectsList.add((JSONObject) loss);
         }
 
-    }
-
-    private void LockId(JSONObject object){
-        while (idList.size() <= Integer.parseInt(object.get("id").toString())){
-            idList.add(false);
-        }
-        idList.set(Integer.parseInt(object.get("id").toString()), true);
     }
 
     @FXML
@@ -385,18 +304,6 @@ public class MainLayoutController implements Initializable
 
     }
 
-    private void GiveId(JSONObject object){
-        for(int i = 0; i < idList.size(); i++){
-            if(!idList.get(i)) {
-                object.put("id", i);
-                idList.set(i, true);
-                return;
-            }
-        }
-        idList.add(true);
-        object.put("id", idList.size() - 1);
-    }
-
     @FXML
     private void DeleteObject(){
         JSONObject data = objectData.GetObject();
@@ -416,15 +323,14 @@ public class MainLayoutController implements Initializable
         DrawInCanvas();
     }
 
-
     public void HandleObjectClick(MouseEvent mouseEvent) {
         if(mouseEvent.getClickCount() == 2){
             JSONObject object = objectsView.getSelectionModel().getSelectedItem();
             if(object != null) {
                 switch (object.get("type").toString()) {
                     case ("Stationery"):
-                         Stationery.display("Stationery Edit", object);
-                         break;
+                        Stationery.display("Stationery Edit", object);
+                        break;
                     case ("Movable"):
                         Movable.display("Movable Edit", object);
                         break;
@@ -437,11 +343,37 @@ public class MainLayoutController implements Initializable
                 }
                 objectsView.refresh();
                 objectData.Write();
+                DrawInCanvas();
             }
         }
     }
+    //-----------------------------------------------------------------------------------------------------------------
 
+    //-----------------------------------------------------------------------------------------------------------------
+    //id related functions
 
+    private void GiveId(JSONObject object){
+        for(int i = 0; i < idList.size(); i++){
+            if(!idList.get(i)) {
+                object.put("id", i);
+                idList.set(i, true);
+                return;
+            }
+        }
+        idList.add(true);
+        object.put("id", idList.size() - 1);
+    }
+
+    private void LockId(JSONObject object){
+        while (idList.size() <= Integer.parseInt(object.get("id").toString())){
+            idList.add(false);
+        }
+        idList.set(Integer.parseInt(object.get("id").toString()), true);
+    }
+    //-----------------------------------------------------------------------------------------------------------------
+
+    //-----------------------------------------------------------------------------------------------------------------
+    // picture import related functions
     public void AcceptFiles(DragEvent event){
         if (event.getDragboard().hasFiles()) {
             List<File> draggedFiles = event.getDragboard().getFiles();
@@ -465,6 +397,93 @@ public class MainLayoutController implements Initializable
             if(!Main.files.contains(file)){
                 Main.CopyFile(file, asset_directory);
             }
+        }
+    }
+
+    @FXML
+    private void HandleImport() {
+        File file = FullBrowser.display("Import Picture", "pic");
+        if (!Main.files.contains(file))
+            Main.CopyFile(file, new File(Main.directory + "\\assets"));
+    }
+    public void AddToImportBox(File file){
+        if(file != null) {
+            ImageView temp = new ImageView();
+            temp.setImage(new Image(file.toURI().toString()));
+            temp.setPickOnBounds(true);
+            temp.setOnDragDetected(e ->{
+                Dragboard db = temp.startDragAndDrop(TransferMode.COPY);
+                ClipboardContent content = new ClipboardContent();
+                content.putFiles(Collections.singletonList(file));
+                db.setContent(content);
+                e.consume();
+            });
+
+            Main.ReSizePicture(175, 175, temp);
+            VBox tempLayout = new VBox(5);
+            tempLayout.setMaxWidth(175);
+            Label tempName = new Label(file.getName());
+            tempLayout.setAlignment(Pos.CENTER);
+            tempLayout.getChildren().addAll(temp, tempName);
+            importFiles.getChildren().add(tempLayout);
+        }
+    }
+
+    public void RemoveFile(File file){
+        for(Node layout :importFiles.getChildren()){
+            VBox fullLayout = (VBox)layout;
+            for(Node layoutFile : fullLayout.getChildren()){
+                if(layoutFile instanceof Label)
+                    if(((Label) layoutFile).getText().equals(file.getName())){
+                        importFiles.getChildren().remove(fullLayout);
+                        return;
+                    }
+
+            }
+        }
+    }
+    //-----------------------------------------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------------------------
+    // menu related functions
+    @FXML
+    public void Export(){
+        File path = PathTaker.display("where to export?");
+        File copiedPath = null;
+        ArrayList<String> files = new ArrayList<>();
+        if(path != null) {
+            for (File file : Objects.requireNonNull(path.listFiles())) {
+                if(file.isDirectory())
+                    files.add(file.getName());
+            }
+            if (!files.contains(Main.export.getName())) {
+                Main.CopyFile(Main.export, path);
+                copiedPath = new File(path.getPath() + "\\" + "assets");
+            }
+            if(copiedPath != null) {
+                for (File file : Objects.requireNonNull(Main.assets.listFiles())) {
+                    if (file.isFile())
+                        Main.CopyFile(file, copiedPath);
+                }
+            }
+        }
+    }
+
+    @FXML
+    public void Exit(){
+        ((Stage)mainLayout.getScene().getWindow()).close();
+    }
+
+    @FXML
+    public void Run(){
+        File path = new File(Main.export.getPath() + "\\assets");
+        for (File file : Objects.requireNonNull(Main.assets.listFiles())) {
+            if (file.isFile())
+                Main.CopyFile(file, path);
+        }
+        try {
+            Runtime.getRuntime().exec(Main.export.getPath() + "\\game_engine.exe", null, Main.export);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

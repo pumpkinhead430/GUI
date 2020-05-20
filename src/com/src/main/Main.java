@@ -1,8 +1,7 @@
 package com.src.main;
-import com.src.PathTaker.PathTaker;
+
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -26,6 +25,8 @@ public class Main extends Application
     public static final String[] pictureFormat = {"jpg", "png", "bmp", "jpeg"};
     public static final String directory = Paths.get("src").toAbsolutePath().toString();
     public static final File assets = new File(Paths.get("src//assets").toAbsolutePath().toString());
+    public static final File export = new File(Paths.get("src//assets//export").toAbsolutePath().toString());
+    public static ProgressBar bar = new ProgressBar();
     public static ArrayList<File> files = new ArrayList<>();
     public static void main(String[] arguments)
     {
@@ -112,8 +113,10 @@ public class Main extends Application
         if(src != null && dest != null) {
             if (src.exists() && dest.exists()) {
                 try {
-                    System.out.println(src + " " + dest);
-                    FileUtils.copyFileToDirectory(src, dest);
+                    if(src.isFile())
+                        FileUtils.copyFileToDirectory(src, dest);
+                    if(src.isDirectory())
+                        FileUtils.copyDirectory(src, dest);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

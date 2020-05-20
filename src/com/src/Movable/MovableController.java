@@ -82,8 +82,8 @@ public class MovableController implements Initializable {
     public void LoadJSON(){
         nameField.setText(movableObject.get("name").toString());
         healthField.setText(movableObject.get("health").toString());
-        PYField.setText(movableObject.get("x").toString());
-        PXField.setText(movableObject.get("y").toString());
+        PYField.setText(movableObject.get("y").toString());
+        PXField.setText(movableObject.get("x").toString());
         for(Object o : ((JSONArray)movableObject.get("animations"))){
 
             animationTab animation = new animationTab( (JSONObject) o);

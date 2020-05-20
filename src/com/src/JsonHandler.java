@@ -17,7 +17,6 @@ public class JsonHandler {
         this.fileName = fileName;
         JSONParser parser = new JSONParser();
         try{
-            System.out.println(this.fileName);
             Reader reader = new FileReader(this.fileName);
 
             this.jsonObject = (JSONObject) parser.parse(reader);

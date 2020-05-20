@@ -55,7 +55,6 @@ public class BrowserController implements Initializable {
                 else {
 
                         if (type.equals("dir")) {
-                            System.out.println(treeFile);
                             if (treeFile.isDirectory()) {
                                 Stage thisWindow = (Stage) browseTree.getScene().getWindow();
                                 thisWindow.close();

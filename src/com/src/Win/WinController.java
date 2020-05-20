@@ -55,6 +55,8 @@ public class WinController implements Initializable {
         typeBox.setOnAction(e -> HandleSelected());
         characterButton.setOnDragOver(this::AcceptFiles);
         characterButton.setOnDragDropped(this::HandleDrop);
+        screenButton.setOnDragOver(this::AcceptPicture);
+        screenButton.setOnDragDropped(this::HandleDropPicture);
 
 
         objectsView.setOnDragDetected(e ->{
@@ -105,6 +107,13 @@ public class WinController implements Initializable {
             }
         });
     }
+    private JSONObject FindCharacterId(String id){
+        for(JSONObject object : objectsList){
+            if(id.equals(object.get("id").toString()))
+                return object;
+        }
+        return null;
+    }
 
     @FXML
     private void handlePictureButton() {
@@ -117,13 +126,6 @@ public class WinController implements Initializable {
         }
     }
 
-    public void SwitchPicture(String name){
-        File asset_directory = new File(Main.directory + "\\assets");
-        File picture = new File(asset_directory + "\\" + name);
-        if(picture.exists()) {
-            screenButton.setText(picture.getName());
-        }
-    }
 
 
     public void SetObjects(ObservableList<JSONObject> objects){
@@ -169,6 +171,41 @@ public class WinController implements Initializable {
         }
 
     }
+    @FXML
+    public void AcceptPicture(DragEvent event){
+        if (event.getDragboard().hasFiles()) {
+            List<File> draggedFiles = event.getDragboard().getFiles();
+            for(File file : draggedFiles){
+                if(!Main.IsPicture(file.getName())){
+                    event.consume();
+                    break;
+                }
+            }
+            if(!event.isConsumed())
+                event.acceptTransferModes(TransferMode.COPY);
+        }
+        else
+            event.consume();
+    }
+
+    public void HandleDropPicture(DragEvent event){
+        File dropFile = event.getDragboard().getFiles().get(0);
+        File asset_directory = new File(Main.directory + "\\assets");
+        File copiedFile = new File(asset_directory.getPath() + "\\" + dropFile.getName());
+        if(!Main.files.contains(copiedFile)){
+            Main.CopyFile(dropFile, asset_directory);
+        }
+        SwitchPicture(copiedFile.getName());
+    }
+
+    public void SwitchPicture(String name){
+        File asset_directory = new File(Main.directory + "\\assets");
+        File picture = new File(asset_directory + "\\" + name);
+        if(picture.exists()) {
+            screenButton.setText(picture.getName());
+            winObject.put("screen", "assets\\" + picture.getName());
+        }
+    }
 
     public void SetJson(JSONObject object) {
         winObject = object;
@@ -182,6 +219,11 @@ public class WinController implements Initializable {
         endYField.setText(winObject.get("endY").toString());
         typeBox.getSelectionModel().select(winObject.get("action").toString());
         screenButton.setText(winObject.get("screen").toString().replace("assets\\", ""));
+        if(FindCharacterId(winObject.get("characterId").toString()) != null) {
+            JSONObject object = FindCharacterId(winObject.get("characterId").toString());
+            characterId = Integer.parseInt(winObject.get("characterId").toString());
+            characterButton.setText(object.get("name").toString());
+        }
 
         HandleSelected();
     }

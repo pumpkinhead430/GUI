@@ -28,7 +28,6 @@ public class Win {
             Scene scene = new Scene(root);
             scene.getStylesheets().add("Viper.css");
             window.setScene(scene);
-            window.setOnCloseRequest((WindowEvent e) -> System.out.println("hi"));
             window.setAlwaysOnTop(true);
             window.showAndWait();
             controller.WriteInfo();

@@ -1,12 +1,9 @@
 package com.src.PathTaker;
 
-import com.src.Win.Win;
-import com.src.Win.WinController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 import java.io.File;
 import java.io.IOException;

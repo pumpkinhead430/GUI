@@ -97,7 +97,10 @@ public class AnimationController implements Initializable {
         animation.put("forcey", Integer.parseInt(YForceField.getText()));
         animation.put("forcex", Integer.parseInt(XForceField.getText()));
         animation.put("damage", Integer.parseInt(damageField.getText()));
-        animation.put("trigger", triggerField.getText());
+        if(triggerField.getText().equals(" "))
+            animation.put("trigger", "Space");
+        else
+            animation.put("trigger", triggerField.getText());
         animation.put("time", Integer.parseInt(timeField.getText()));
 
         JSONArray frames = new JSONArray();
@@ -118,10 +121,13 @@ public class AnimationController implements Initializable {
     }
     public void PutJson(JSONObject object){
         nameField.setText(object.get("name").toString());
-        XForceField.setText(object.get("forcey").toString());
-        YForceField.setText(object.get("forcex").toString());
+        XForceField.setText(object.get("forcex").toString());
+        YForceField.setText(object.get("forcey").toString());
         damageField.setText(object.get("damage").toString());
-        triggerField.setText(object.get("trigger").toString());
+        if(object.get("trigger").toString().equals("Space"))
+            triggerField.setText(" ");
+        else
+            triggerField.setText(object.get("trigger").toString());
         timeField.setText(object.get("time").toString());
 
         for(Object o : ((JSONArray)object.get("ani_starter"))){

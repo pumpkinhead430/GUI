@@ -1,4 +1,5 @@
 package com.src.main;
+
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -7,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.DataFormat;
 import javafx.stage.Stage;
 import org.apache.commons.io.FileUtils;
 
@@ -23,11 +25,15 @@ public class Main extends Application
     public static final String[] pictureFormat = {"jpg", "png", "bmp", "jpeg"};
     public static final String directory = Paths.get("src").toAbsolutePath().toString();
     public static final File assets = new File(Paths.get("src//assets").toAbsolutePath().toString());
+    public static final File export = new File(Paths.get("src//assets//export").toAbsolutePath().toString());
+    public static ProgressBar bar = new ProgressBar();
     public static ArrayList<File> files = new ArrayList<>();
     public static void main(String[] arguments)
     {
-        Application.launch(Main.class, arguments);
+        launch(arguments);
     }
+    public static final DataFormat jsonObjectFormat = new DataFormat(
+            "imported JSONSimple(JSON object)");
 
 
     @Override
@@ -40,6 +46,7 @@ public class Main extends Application
         scene.getStylesheets().add("Viper.css");
         stage.setScene(scene);
         stage.show();
+
         Thread thread =  new Thread(() -> {
             while (stage.isShowing()) {
 
@@ -80,7 +87,7 @@ public class Main extends Application
         field.getProperties().put("vkType", "numeric");
         field.setTextFormatter(new TextFormatter<>(c -> {
             if (c.isContentChange()){
-                if(c.getControlNewText().matches("[0-9]*")){
+                if(c.getControlNewText().matches("[0-9]+")){
                     return c;
                 }
 
@@ -95,7 +102,7 @@ public class Main extends Application
 
         int i = fileName.lastIndexOf('.');
         if (i > 0) {
-            extension = fileName.substring(i+1);
+            extension = fileName.substring(i+1).toLowerCase();
         }
         for(String format : pictureFormat)
             if(extension.equals(format))
@@ -106,8 +113,10 @@ public class Main extends Application
         if(src != null && dest != null) {
             if (src.exists() && dest.exists()) {
                 try {
-                    System.out.println(src + " " + dest);
-                    FileUtils.copyFileToDirectory(src, dest);
+                    if(src.isFile())
+                        FileUtils.copyFileToDirectory(src, dest);
+                    if(src.isDirectory())
+                        FileUtils.copyDirectory(src, dest);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

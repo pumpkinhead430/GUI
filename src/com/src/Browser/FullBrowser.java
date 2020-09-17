@@ -10,7 +10,7 @@ import java.io.IOException;
 
 public class FullBrowser {
 
-    public static File display(String title){
+    public static File display(String title, String type){
         try {
             Stage window = new Stage();
             window.initModality(Modality.APPLICATION_MODAL);
@@ -20,6 +20,7 @@ public class FullBrowser {
             FXMLLoader loader = new FXMLLoader(FullBrowser.class.getResource("Browser.fxml"));
             Parent root = loader.load();
             BrowserController browserController = loader.getController();
+            browserController.type = type;
             Scene scene = new Scene(root);
             scene.getStylesheets().add("Viper.css");
             window.setScene(scene);
@@ -27,14 +28,19 @@ public class FullBrowser {
             window.showAndWait();
             File selectedFile = browserController.GetFile();
             if (selectedFile != null) {
-                File assetsDir = new File(Main.directory + "\\assets");
-                File dest = new File(assetsDir.getPath() + "\\" + selectedFile.getName());
-                if (!dest.exists()) {
-                    Main.CopyFile(selectedFile, assetsDir);
+                if (selectedFile.isFile()) {
+                    File assetsDir = new File(Main.directory + "\\assets");
+                    File dest = new File(assetsDir.getPath() + "\\" + selectedFile.getName());
+                    if (!dest.exists()) {
+                        Main.CopyFile(selectedFile, assetsDir);
+                    }
+                    return selectedFile;
                 }
-                return selectedFile;
+                if (selectedFile.isDirectory())
+                    return selectedFile;
             }
             return null;
+
         }
         catch (IOException e){
             e.printStackTrace();

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.*?>
+<?import javafx.scene.canvas.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.effect.*?>
 <?import javafx.scene.layout.*?>
@@ -8,16 +9,16 @@
 
 <BorderPane id="Border" fx:id="mainLayout" prefHeight="720" prefWidth="1280" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.src.main.MainLayoutController">
     <top>
-        <MenuBar fx:id="menuBar" onKeyPressed="#handleKeyInput">
+        <MenuBar fx:id="menuBar">
             <Menu text="File">
-                <MenuItem onAction="#handleAboutAction" text="New Project..." />
+                <MenuItem text="New Project..." />
                 <MenuItem text="Open Project..." />
                 <SeparatorMenuItem />
-                <MenuItem text="Export..." />
-                <MenuItem text="Save As..." />
+                <MenuItem onAction="#Export" text="Export..." />
+                <MenuItem onAction="#Run" text="Run..." />
                 <MenuItem text="Save" />
                 <SeparatorMenuItem />
-                <MenuItem text="Exit" />
+                <MenuItem onAction="#Exit" text="Exit" />
             </Menu>
             <Menu text="Edit">
                 <MenuItem text="Copy" />
@@ -28,7 +29,7 @@
                 <MenuItem disable="true" text="Search" />
                 <MenuItem text="Online Manual" visible="false" />
                 <SeparatorMenuItem />
-                <MenuItem onAction="#handleAboutAction" text="About" />
+                <MenuItem text="About" />
             </Menu>
         </MenuBar>
     </top>
@@ -120,12 +121,11 @@
                         </ScrollPane>
                         <ToolBar prefHeight="49.0" prefWidth="329.0">
                             <items>
-                                <Button mnemonicParsing="false" onAction="#NewMovableObject" text="Add Movable">
+                                <Button fx:id="newObject" mnemonicParsing="false" onAction="#NewObject" text="New Object">
                                     <opaqueInsets>
                                         <Insets />
                                     </opaqueInsets>
                                 </Button>
-                                <Button mnemonicParsing="false" onAction="#NewStationaryObject" text="Add Stationary" />
                                 <Button fx:id="deleteObject" alignment="TOP_LEFT" mnemonicParsing="false" onAction="#DeleteObject" text="Delete" />
                             </items>
                             <opaqueInsets>
@@ -137,4 +137,11 @@
             </content>
         </ScrollPane>
     </right>
+   <center>
+      <Pane fx:id="canvasPane" BorderPane.alignment="CENTER">
+         <children>
+            <Canvas fx:id="mainCanvas" height="440.0" width="730.0" />
+         </children>
+      </Pane>
+   </center>
 </BorderPane>

@@ -2,11 +2,16 @@ package com.src.Movable;
 
 import com.src.Browser.FullBrowser;
 import com.src.main.Main;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.TilePane;
@@ -52,23 +57,26 @@ public class AnimationController implements Initializable {
         frameList.setItems(frameObsList);
         aniStartObsList = FXCollections.observableArrayList();
         aniStartList.setItems(aniStartObsList);
+
+
         damageField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if(!newValue.matches("-*[0-9]*")){
+            if(!newValue.matches("-*[0-9]+")){
                 damageField.setText(oldValue);
             }
         });
         YForceField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if(!newValue.matches("-*[0-9]*")){
+            if(!newValue.matches("-*[0-9]+")){
                 YForceField.setText(oldValue);
             }
         });
         XForceField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if(!newValue.matches("-*[0-9]*")){
+            if(!newValue.matches("-*[0-9]+")){
                 XForceField.setText(oldValue);
             }
         });
         triggerField.textProperty().addListener((observable, oldValue, newValue) -> {
-            triggerField.setText(newValue.substring(newValue.length() -1));
+            if(!newValue.equals(""))
+                triggerField.setText(newValue.substring(newValue.length() -1));
         });
         nameField.textProperty().addListener((observable, oldValue, newValue) -> {
             mainTab.setText(newValue);
@@ -84,17 +92,20 @@ public class AnimationController implements Initializable {
         JSONObject animation = new JSONObject();
 
         animation.put("name", nameField.getText());
-        animation.put("forcey", YForceField.getText());
-        animation.put("forcex", XForceField.getText());
-        animation.put("damage", damageField.getText());
-        animation.put("trigger", triggerField.getText());
-        animation.put("time", timeField.getText());
+        animation.put("forcey", Integer.parseInt(YForceField.getText()));
+        animation.put("forcex", Integer.parseInt(XForceField.getText()));
+        animation.put("damage", Integer.parseInt(damageField.getText()));
+        if(triggerField.getText().equals(" "))
+            animation.put("trigger", "Space");
+        else
+            animation.put("trigger", triggerField.getText());
+        animation.put("time", Integer.parseInt(timeField.getText()));
 
         JSONArray frames = new JSONArray();
+        if(frameObsList.size() == 0){
+            frameObsList.add("default.png");
+        }
         for(String frame : frameObsList){
-            System.out.println(frame);
-            System.out.println("assets//" + frame);
-            System.out.println("assets/" + frame);
             frames.add("assets/" + frame);
         }
         animation.put("frames", frames);
@@ -108,10 +119,13 @@ public class AnimationController implements Initializable {
     }
     public void PutJson(JSONObject object){
         nameField.setText(object.get("name").toString());
-        XForceField.setText(object.get("forcey").toString());
-        YForceField.setText(object.get("forcex").toString());
+        XForceField.setText(object.get("forcex").toString());
+        YForceField.setText(object.get("forcey").toString());
         damageField.setText(object.get("damage").toString());
-        triggerField.setText(object.get("trigger").toString());
+        if(object.get("trigger").toString().equals("Space"))
+            triggerField.setText(" ");
+        else
+            triggerField.setText(object.get("trigger").toString());
         timeField.setText(object.get("time").toString());
 
         for(Object o : ((JSONArray)object.get("ani_starter"))){
@@ -129,7 +143,7 @@ public class AnimationController implements Initializable {
     }
     @FXML
     public void AddFrame(){
-        File frame = FullBrowser.display("choose Frame");
+        File frame = FullBrowser.display("choose Frame", "pic");
         if(frame != null) {
             if(!Main.ExsitsInAssets(frame.getName()))
                 Main.CopyFile(frame, Main.assets);

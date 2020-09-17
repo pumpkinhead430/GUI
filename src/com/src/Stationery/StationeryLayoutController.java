@@ -51,7 +51,7 @@ public class StationeryLayoutController implements Initializable {
     private Button browse;
     @FXML
     private void handlePictureButton() {
-        File Picture = FullBrowser.display("Background");
+        File Picture = FullBrowser.display("Background", "pic");
         if(Picture != null){
             if(!Main.files.contains(Picture)) {
                 Main.CopyFile(Picture, new File(Main.directory + "\\assets"));
@@ -99,9 +99,9 @@ public class StationeryLayoutController implements Initializable {
             text.add(field.getText());
         stationeryObject.put("ani_start", text);
         stationeryObject.put("name", nameField.getText());
-        stationeryObject.put("x",PXField.getText());
-        stationeryObject.put("y", PYField.getText());
-        stationeryObject.put("damage", damageField.getText());
+        stationeryObject.put("x",Integer.parseInt(PXField.getText()));
+        stationeryObject.put("y", Integer.parseInt(PYField.getText()));
+        stationeryObject.put("damage", Integer.parseInt(damageField.getText()));
     }
     public void AcceptFiles(DragEvent event){
         if (event.getDragboard().hasFiles()) {
